@@ -1,0 +1,51 @@
+#header {
+	width: 1004px;
+	margin: 20px auto 0 auto;
+}
+#container {
+	width: 1004px;
+	margin: 0 auto;
+}
+#homeworks {
+	margin: 20px 0;
+	border-radius: 5px;
+	overflow: hidden;
+}
+.homework-item-box {
+	background: #2ECC71;
+	padding: 10px;
+	color: #fff;
+	border-bottom: 2px solid #27AE60;
+}
+.homework-item-box-undone {
+	background: #E74C3C;
+	border-bottom: 2px solid #C0392B;
+}
+.homework-item-box a {
+	color: #fff;
+}
+.homework-item-box a:hover {
+	text-decoration: underline;
+}
+.homework-item-title {
+	float: left;
+}
+.homework-item-time {
+	font-size: 12px;
+	float: right;
+}
+.homework-item-content {
+	font-size: 14px;
+	padding: 10px 10px 10px 30px;
+}
+.homework-item-toolbar {
+	font-size: 12px;
+}
+.homework-item-toolbar ul li {
+	list-style: none;
+	float: right;
+	margin-left: 20px;
+}
+.submit-label {
+	cursor: pointer;
+}
