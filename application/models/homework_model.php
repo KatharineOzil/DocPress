@@ -198,8 +198,8 @@ class Homework_model extends CI_Model {
 		$this->db->where('hid', $hid);
 		$this->db->delete('stu_list');
 
-		$this->db->where('title', $title);
-		$this->db->delete('homeworkTohid');
+		//$this->db->where('title', $title);
+		//$this->db->delete('homeworkTohid');
 	}
 
 	function get_homework_submitted_detail($id) {
