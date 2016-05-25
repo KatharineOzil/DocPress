@@ -146,12 +146,12 @@ class Welcome extends CI_Controller {
 
 		if (!is_dir('upload/' . $homework->title)){
 			mkdir('upload/' . $homework->title);
-			mkdir('upload/' . $homework->title . '/' . $homework->hid);
+			//mkdir('upload/' . $homework->title . '/' . $homework->hid);
 		}
-		else if(!is_dir('upload/' . $homework->title . '/' . $homework->hid)) {
-			mkdir('upload/' . $homework->title . '/' . $homework->hid);
-		}
-		move_uploaded_file($_FILES["the_file"]["tmp_name"], "upload/" . $homework->title .  '/' . $homework->hid . '/' . $file_name);
+		//else if(!is_dir('upload/' . $homework->title . '/' . $homework->hid)) {
+		//	mkdir('upload/' . $homework->title . '/' . $homework->hid);
+		//}
+		move_uploaded_file($_FILES["the_file"]["tmp_name"], "upload/" . $homework->title .  '/' . $file_name);
 		$this->homework->submit($id, $this->session->userdata['id'], $file_name);
 		redirect();
 	}
@@ -170,13 +170,11 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->library('zip');
 		$work = $this->homework->getHomework($id);
-		print_r($work);
-		die();
-		//$homework = $this->homework->get_homework_detail($id);
-		foreach ($work->submittions as $key => $value) {
-			$this->zip->read_file('upload/' . $work->title . '/' . $work->hid . '/' . $value->file_name);
+		$homework = $this->homework->get_homework_detail($id);
+		foreach ($work->submissions as $key => $value) {
+			$this->zip->read_file('upload/' . $homework->title . '/' . $value->file_name);
 		}
-		$this->zip->download('第' . $id . '次作业打包.zip');
+		$this->zip->download($homework->title . '作业打包.zip');
 	}
 
 	public function delete_teacher($name)

@@ -10,15 +10,11 @@ class Homework_model extends CI_Model {
 	function create($title, $hwid, $content, $creator_id, $attachment)
 	{
 		$homework_type = $this->input->post('type');
+		$hid_list = explode('/' , $hwid);
+		$responses = array();
 
-		$data1 = array(
-				'title' => $title,
-				'hid' => $hwid
-				);
-		$this->db->insert('homeworkTohid', $data1);
-
-		$hid = explode('\\' , $hwid);
-		foreach($hid as $hid) {
+		// fetch student lists from jwzx and check
+		foreach ($hid_list as $hid) {
 			if (!preg_match('/(SJ|A|SK)\d{5,12}/', $hid, $type)) {
 				die('<meta charset="utf-8"><script>alert("教学班号不正确");history.back(-1);</script>');
 			}
@@ -31,38 +27,42 @@ class Homework_model extends CI_Model {
 
 			if(!preg_match('/(20[\d]{8})<\/td>\s*?<td\s*?>(.*?)<\/td>/', $str)){
 				die('<meta charset="utf-8"><script>alert("教学班没有选课学生，请检查教学班号！");history.back(-1);</script>');
+			} else {
+				$responses[$hid] = $str;
 			}
-			else{
-				$data1 = array(
-						'title' => $title,
-						'hid' => $hid,
-						'content' => $content,
-						'create_time' => date('Y-m-d H:i:s'),
-						'creator_id' => $creator_id,
-						'attachment' => $attachment,
-						'type' => $homework_type
-				    	 );
-				$this->db->insert('homework', $data1);
-				$this->db->where('hid', $hid);
+		}
 
-				if(!$this->db->count_all_results('stu_list')){
-					//$url = $type[1] == 'A' ? $llk_url : $sjk_url;
-					//$str = file_get_contents($url);
-					preg_match_all('/(20[\d]{8})<\/td>\s*?<td\s*?>(.*?)<\/td>/', $str, $data);
-					$result = array_map(null, $data[1], $data[2]);
-			
-					foreach ($result as $key => $value) {
-						$value[1] = iconv("GBK", "UTF-8", $value[1]);
-						$list = array(
-								'hid' => $hid,
-								'sid' => $value[0],
-								'name' => $value[1]
-							    );
-						$this->db->insert('stu_list', $list);
-					}
+		// save student lists to database
+		foreach($hid_list as $hid) {
+			$str = $responses[$hid];
+			$this->db->where('hid', $hid);
+			if(!$this->db->count_all_results('stu_list')){
+				preg_match_all('/(20[\d]{8})<\/td>\s*?<td\s*?>(.*?)<\/td>/', $str, $data);
+				$result = array_map(null, $data[1], $data[2]);
+		
+				foreach ($result as $key => $value) {
+					$value[1] = iconv("GBK", "UTF-8", $value[1]);
+					$list = array(
+							'hid' => $hid,
+							'sid' => $value[0],
+							'name' => $value[1]
+						    );
+					$this->db->insert('stu_list', $list);
 				}
 			}
 		}
+
+		// create homework row
+		$data1 = array(
+			'title' => $title,
+			'hid' => $hwid,
+			'content' => $content,
+			'create_time' => date('Y-m-d H:i:s'),
+			'creator_id' => $creator_id,
+			'attachment' => $attachment,
+			'type' => $homework_type
+			);
+		$this->db->insert('homework', $data1);
 	}
 
 	function getHomeworks($user_id = 0, $level='student')
@@ -86,12 +86,16 @@ class Homework_model extends CI_Model {
 				return array();
 			}
 		}
+		//print_r($hid);
 		$this->db->select('homework.id as id, homework.title as title, homework.content as content, homework.hid as hid, homework.create_time as create_time, homework.attachment as attachment, teacher_user.name as name, homework.type as type');
 		$this->db->from('homework');
 		$this->db->order_by('homework.id desc');
 		$this->db->join('teacher_user', 'teacher_user.id = homework.creator_id');
+		//$this->db->join('homeworkTohid', '')
 		if ($level === 'student') {
-			$this->db->where_in('homework.hid', $hid);
+			foreach ($hid as $h) {
+				$this->db->like('homework.hid', $h);
+			}
 		} else if ($level === 'teacher') {
 			$this->db->where('homework.creator_id', $user_id);
 		}
@@ -116,8 +120,9 @@ class Homework_model extends CI_Model {
 			$query = $this->db->get()->result();
 			$work->count = count($query);
 
+			$hid_list = explode('/' , $work->hid);
 			$this->db->from('stu_list');
-			$this->db->where('hid', $work->hid);
+			$this->db->where_in('hid', $hid_list);
 			$query = $this->db->get()->result();
 			$work->total_count = count($query);
 		}
@@ -147,9 +152,10 @@ class Homework_model extends CI_Model {
 			}
 			$work->submissions = $submissions;
 
+			$hid_list = explode('/', $work->hid);
 			$this->db->select('id, sid, name');
 			$this->db->from('stu_list');
-			$this->db->where('hid', $work->hid);
+			$this->db->where_in('hid', $hid_list);
 	
 			if ($submissions_users) {
 				$this->db->where_not_in('id', $submissions_users);

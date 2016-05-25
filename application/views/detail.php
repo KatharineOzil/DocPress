@@ -28,7 +28,7 @@
 				echo '<td>' . $value->user->id . '</td>';
 				echo '<td>' . $value->user->name . '</td>';
 				echo '<td>' . $value->time . '</td>';
-				echo '<td><a href="' . base_url('upload/' . $work->title . '/' . $work->hid . '/' . $value->file_name) . '">点击下载</a></td>';
+				echo '<td><a href="' . base_url('upload/' . $work->title . '/' . $value->file_name) . '">点击下载</a></td>';
 				//echo '<td><input type="file" name="the_file" onchange=""></td>';
 				echo '<td><a class="submit-label" data-id="' . $value->id . '">上传反馈</a></td>';
 				echo '<td>';

@@ -35,9 +35,9 @@
 				<div class="form-group">
 					<label for="homework-content" class="col-xs-2 control-label">教学班说明</label>
 					<div class="col-xs-10">
-					同一门课程多个教学班请用“\”隔开。例如：
+					同一门课程多个教学班请用“/”隔开。例如：
 					<br/>
-					A1234567\A2345678
+					A1234567/A2345678
 					</div>
 				</div>
 			</div>
