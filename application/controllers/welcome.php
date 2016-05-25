@@ -146,11 +146,7 @@ class Welcome extends CI_Controller {
 
 		if (!is_dir('upload/' . $homework->title)){
 			mkdir('upload/' . $homework->title);
-			//mkdir('upload/' . $homework->title . '/' . $homework->hid);
 		}
-		//else if(!is_dir('upload/' . $homework->title . '/' . $homework->hid)) {
-		//	mkdir('upload/' . $homework->title . '/' . $homework->hid);
-		//}
 		move_uploaded_file($_FILES["the_file"]["tmp_name"], "upload/" . $homework->title .  '/' . $file_name);
 		$this->homework->submit($id, $this->session->userdata['id'], $file_name);
 		redirect();
@@ -192,7 +188,6 @@ class Welcome extends CI_Controller {
 			redirect('login');
 		}
 		$work = $this->homework->get_homework_submitted_detail($id);
-		//print_r($work);
 		$original_name = $_FILES["the_file"]["name"];
 		$extension = "." . pathinfo($original_name, PATHINFO_EXTENSION);
 		if (!in_array($extension, array(".doc", ".docx", ".pdf", ".zip"))) {
