@@ -235,4 +235,15 @@ class Homework_model extends CI_Model {
 		$this->db->where('id', $id);
 		$this->db->update('homework_submission', $data);
 	}
+
+	function check_homework($homework_title)
+	{
+		$file = 'upload/'.$homework_title.'.txt';
+		$homework_title = escapeshellarg($homework_title);
+		$handle = popen("/usr/bin/python compare.py '$homework_title' 2>&1 > $file", "r");
+		pclose($handle);
+		$data = file_get_contents($file);	
+		return $data;
+	}
+
 }

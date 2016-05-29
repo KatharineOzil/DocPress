@@ -77,9 +77,9 @@ class Welcome extends CI_Controller {
 
 	public function login()
 	{	
-		if (isset($this->session->userdata['id'])) {
+		//if (isset($this->session->userdata['id'])) {
 			//redirect();
-		}
+		//}
 		$data['title'] = '登录';
 		$this->load->view('login');
 	}
@@ -90,6 +90,16 @@ class Welcome extends CI_Controller {
 		redirect();
 	}
 
+	public function check_homework($id)
+	{
+		if ($this->session->userdata['level'] != 'teacher') {
+			redirect();
+		}
+		$work = $this->homework->get_homework_detail($id);
+		$data['work'] = $work;
+		$data['result'] = $this->homework->check_homework($work->title);
+		$this->load->view('check_homework', $data);
+	}
 	
 
 	public function new_homework()

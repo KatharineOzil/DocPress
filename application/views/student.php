@@ -1,7 +1,7 @@
 <?php $this->load->view('header'); ?>
 
 	<div class="col-xs-1 col-xs-offset-0" id="level-switch">
-	    <input type="checkbox" checked data-toggle="switch" data-on-color="success" data-on-text="理论课" data-off-text="实践课" data-off-color="warning"/>
+	    <input type="checkbox" checked data-toggle="switch" data-on-color="success" data-on-text="理论" data-off-text="实践" data-off-color="warning"/>
 	</div>
 	<br/>
 	<br/>

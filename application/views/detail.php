@@ -1,6 +1,7 @@
 <?php $this->load->view('header'); ?>
 	
 	<a href="<?php echo site_url(); ?>" class="btn btn-default">返回</a>
+	<a href="<?php echo site_url('check_homework/' . $work->id); ?>" class="btn btn-primary">作业查重</a>
 	<h4><?php echo $work->hid; ?> 提交列表</h4>
 	<?php if (empty($work->submissions)){ 
 		echo "当前没有人提交作业！";}
@@ -56,7 +57,6 @@
 				echo '<tr>';
 				echo '<td>' . $value->sid . '</td>';
 				echo '<td>' . $value->name . '</td>';
-				//echo '<td>' . $value->class . '</td>';
 			} ?>
 		</tbody>
 	</table>

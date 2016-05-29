@@ -14,7 +14,6 @@ class Ajax extends CI_Controller {
 		redirect();
 	}
 
-
 	public function reset_password()
 	{
 		$password = $this->input->post('password');

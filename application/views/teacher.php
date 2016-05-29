@@ -6,7 +6,7 @@
 	<div>
 	       <label class="col-xs-2 col-xs-offset-0 btn btn-primary">已布置作业</label>
 	       <div id="level-switch" class="col-xs-offset-11">
-	       <input type="checkbox" checked data-toggle="switch" data-on-color="success" data-on-text="理论课" data-off-text="实践课" data-off-color="warning"/>
+	       <input type="checkbox" checked data-toggle="switch" data-on-color="success" data-on-text="理论" data-off-text="实践" data-off-color="warning"/>
 		   </div>
 	</div>
 	<br/>
