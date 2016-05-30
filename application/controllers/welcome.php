@@ -100,6 +100,17 @@ class Welcome extends CI_Controller {
 		$data['result'] = $this->homework->check_homework($work->title);
 		$this->load->view('check_homework', $data);
 	}
+
+	public function homework_tree($id)
+	{
+		if ($this->session->userdata['level'] != 'teacher') {
+			redirect();
+		}
+		$work = $this->homework->get_homework_detail($id);
+		$data['work'] = $work;
+		$data['result'] = $this->homework->homework_tree($work->title);
+		$this->load->view('homework_tree', $data);
+	}
 	
 
 	public function new_homework()

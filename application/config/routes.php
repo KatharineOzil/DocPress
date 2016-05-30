@@ -48,6 +48,7 @@ $route['add_list'] = "welcome/add_list";
 $route['edit_list'] = "welcome/edit_list"; 
 $route['homework_detail/(:any)'] = "welcome/homework_detail/$1"; 
 $route['check_homework/(:any)'] = "welcome/check_homework/$1"; 
+$route['homework_tree/(:any)'] = "welcome/homework_tree/$1"; 
 $route['new'] = "welcome/new_homework"; 
 $route['404_override'] = '';
 

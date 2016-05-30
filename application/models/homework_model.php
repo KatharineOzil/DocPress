@@ -238,11 +238,32 @@ class Homework_model extends CI_Model {
 
 	function check_homework($homework_title)
 	{
-		$file = 'upload/'.$homework_title.'.txt';
+		//$file = 'upload/'.$homework_title.'.txt';
 		$homework_title = escapeshellarg($homework_title);
-		$handle = popen("/usr/bin/python compare.py '$homework_title' 2>&1 > $file", "r");
+		$handle = popen("/usr/bin/python compare.py '$homework_title' 2>&1 ", "r");
+		$data = '';
+		while ($temp = fread($handle, 1024)) {
+			$data .= $temp;
+		}
 		pclose($handle);
-		$data = file_get_contents($file);	
+		//$data = file_get_contents($file);	
+		return $data;
+	}
+
+	function homework_tree($homework_title)
+	{
+		$file = 'upload/'.$homework_title.'/infile';
+		$homework_title = escapeshellarg($homework_title);
+		$stuNum = exec("head -n 1 upload/$homework_title/$homework_title.txt");
+		$handle = popen("./dist2matrix.pl 'upload/$homework_title/$homework_title.txt' '$stuNum' 2>&1 >$file", "r");
+		//$data = '';
+		//while ($temp = fread($handle, 1024)) {
+		//	$data .= $temp;
+		//}
+		pclose($handle);
+		//$data = 'done';
+		$outtree = 'upload/'.$homework_title.'/outtree';
+		$data = file_get_contents($outtree);
 		return $data;
 	}
 
