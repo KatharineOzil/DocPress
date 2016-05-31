@@ -262,9 +262,9 @@ class Homework_model extends CI_Model {
 		//}
 		pclose($handle);
 		//$data = 'done';
-		$outtree = 'upload/'.$homework_title.'/outtree';
-		$data = file_get_contents($outtree);
-		return $data;
+		$tree = exec("./plagiarism_check.sh $homework_title");
+		//$data = file_get_contents($outtree);
+		//return $data;
 	}
 
 }
