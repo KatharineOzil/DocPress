@@ -3,9 +3,11 @@
 	<div class="col-xs-8 col-xs-offset-2">
 		<h4>注册</h4>
 		<div class="row pbl">
-	        <div class="col-xs-2 col-xs-offset-2" id="level-switch">
+	        <div class="col-xs-2 col-xs-offset-2">
+			<div id="level-switch">
 	        	<input type="checkbox" checked data-toggle="switch" data-on-color="success" data-on-text="学生" data-off-text="老师" data-off-color="warning"/>
-	        </div>
+		        </div>
+		</div>
     	</div>
     	<div id="register-student">
 			<form class="form-horizontal" role="form" id="student-register-form">
@@ -95,7 +97,7 @@
 <script>
 var levelSwitch = true;
 $("#register-teacher").hide();
-$("#level-switch").click( function() {
+$("#level-switch").mousedown( function() {
 	if (levelSwitch) {
 		$("#register-student").hide();
 		$("#register-teacher").show();

@@ -65,7 +65,7 @@ class User_model extends CI_Model {
                 'id' => $sid,
                 'password' => sha1($password),
                 'class' => $class,
-                'create_time' => date('Y-m-d H:i:s'),
+//                'create_time' => date('Y-m-d H:i:s'),
                 'name' => $name
             );
         $this->db->insert('stu_user', $data);
@@ -85,7 +85,7 @@ class User_model extends CI_Model {
             return false;
         $data = array(
                 'password' => sha1($password),
-                'create_time' => date('Y-m-d H:i:s'),
+//                'create_time' => date('Y-m-d H:i:s'),
                 'id' => $sid,
                 'status' => 'done'
             );

@@ -7,9 +7,9 @@ class Homework_model extends CI_Model {
 		parent::__construct();
 	}
 
-	function create($title, $hwid, $content, $creator_id, $attachment)
+	function create($title, $hwid, $content, $creator_id)
 	{
-		$homework_type = $this->input->post('type');
+		//$homework_type = $this->input->post('type');
 		$hid_list = explode('/' , $hwid);
 		$responses = array();
 
@@ -55,10 +55,9 @@ class Homework_model extends CI_Model {
 			'title' => $title,
 			'hid' => $hwid,
 			'content' => $content,
-			'create_time' => date('Y-m-d H:i:s'),
+//			'create_time' => date('Y-m-d H:i:s'),
 			'creator_id' => $creator_id,
-			'attachment' => $attachment,
-			'type' => $homework_type
+//			'type' => $homework_type
 			);
 		$this->db->insert('homework', $data1);
 	}
@@ -71,6 +70,7 @@ class Homework_model extends CI_Model {
 			$this->db->from('stu_list');
 			$this->db->where('sid', $user_id);
 			$result = $this->db->get()->result();
+			//var_dump($result);
 			foreach($result as $k => $v) {
 				array_push($hid, $v->hid);	
 			}
@@ -78,18 +78,19 @@ class Homework_model extends CI_Model {
 				return array();
 			}
 		}
-		$this->db->select('homework.id as id, homework.title as title, homework.content as content, homework.hid as hid, homework.create_time as create_time, homework.attachment as attachment, teacher_user.name as name, homework.type as type');
+		$this->db->select('homework.id as id, homework.title as title, homework.content as content, homework.hid as hid, teacher_user.name as name');
 		$this->db->from('homework');
 		$this->db->order_by('homework.id desc');
 		$this->db->join('teacher_user', 'teacher_user.id = homework.creator_id');
 		if ($level === 'student') {
 			foreach ($hid as $h) {
-				$this->db->like('homework.hid', $h);
+				$this->db->or_like('homework.hid', $h);
 			}
 		} else if ($level === 'teacher') {
 			$this->db->where('homework.creator_id', $user_id);
 		}
 		$works = $this->db->get()->result();
+		//die($this->db->last_query());
 		foreach ($works as $key => $work) {
 			$work->done = false;
 			if ($level === 'student') {
@@ -100,7 +101,7 @@ class Homework_model extends CI_Model {
 				if (count($query)) {
 					$query = $query[0];
 					$work->done = true;
-					$work->submit_time = $query->time;
+//					$work->submit_time = $query->time;
 					$work->feedback_file = $query->feedback_file;
 				}
 			}
@@ -187,9 +188,12 @@ class Homework_model extends CI_Model {
 		$this->db->where('id', $id);
 		$this->db->where('creator_id', $uid);
 		$this->db->delete('homework');
+	
+//		$this->db->where('hid', $hid);
+//		$this->db->delete('stu_list');
+		$this->db->where('homework_id', $id);
+		$this->db->delete('homework_submission');
 
-		$this->db->where('hid', $hid);
-		$this->db->delete('stu_list');
 	}
 
 	function get_homework_submitted_detail($id) {
@@ -211,7 +215,7 @@ class Homework_model extends CI_Model {
 				'homework_id' => $homework_id,
 				'user_id' => $user_id,
 				'file_name' => $file_name,
-				'time' => date('Y-m-d H:i:s')
+//				'time' => date('Y-m-d H:i:s')
 			     );
 		$this->db->from('homework_submission');
 		$this->db->where('homework_id', $homework_id);

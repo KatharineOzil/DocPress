@@ -124,14 +124,14 @@ class Welcome extends CI_Controller {
 		$hid = $this->input->post('hid');
 
 		if (!empty($title)) {
-			$original_name = $_FILES["the_file"]["name"];
-			$extension = "." . pathinfo($original_name, PATHINFO_EXTENSION);
-			if (!in_array($extension, array(".doc", ".docx", ".pdf", ".zip"))) {
-				die('<script>alert("不是符合的文件类型（.doc、.docx、.pdf、.zip）");history.go(-1);</script>');
-			}
-			$file_name = $title . "_" . rand(100000, 999999) . $extension;
-			move_uploaded_file($_FILES["the_file"]["tmp_name"], "attachment/" .$file_name);
-			$this->homework->create($title, $hid, $content, $this->session->userdata['id'], $file_name);
+//			$original_name = $_FILES["the_file"]["name"];
+//			$extension = "." . pathinfo($original_name, PATHINFO_EXTENSION);
+//			if (!in_array($extension, array(".doc", ".docx", ".pdf", ".zip"))) {
+//				die('<script>alert("不是符合的文件类型（.doc、.docx、.pdf、.zip）");history.go(-1);</script>');
+//			}
+//			$file_name = $title . "_" . rand(100000, 999999) . $extension;
+//			move_uploaded_file($_FILES["the_file"]["tmp_name"], "attachment/" .$file_name);
+			$this->homework->create($title, $hid, $content, $this->session->userdata['id']);
 			redirect();
 		} else {
 			$this->load->view('new');
@@ -163,7 +163,17 @@ class Welcome extends CI_Controller {
 		if (!$homework) {
 			redirect();
 		}
-		$file_name = $homework->title . "_" . $user->id . "_" . $user->name . $extension;
+		$hwid = $homework->hid;
+		$hid_list = explode('/' , $hwid);		
+		foreach ($hid_list as $hid) {
+			$this->db->from(stu_list);
+			$this->db->where('hid',$hid);
+			$result = $this->db->get()->result();
+			if(count($result)){
+				$stu_hid = $hid;
+			}
+		}
+		$file_name = $stu_hid . "_" . $user->id . "_" . $user->name . $extension;
 
 		if (!is_dir('upload/' . $homework->title)){
 			mkdir('upload/' . $homework->title);

@@ -2,11 +2,12 @@
 
 	<div class="col-xs-8 col-xs-offset-2">
 		<h4>登录</h4>
-		<h5>tips:请不要使用IE8进行上传。</h5>
 		<div class="row pbl">
-	        <div class="col-xs-2 col-xs-offset-2" id="level-switch">
+	        <div class="col-xs-2 col-xs-offset-2">
+			<div id="level-switch">
 	        	<input type="checkbox" checked data-toggle="switch" data-on-color="success" data-on-text="学生" data-off-text="老师" data-off-color="warning"/>
-	        </div>
+	        	</div>
+		</div>
     	</div>
     	<div id="register-student">
 			<form class="form-horizontal" role="form" id="student-register-form">
@@ -68,15 +69,15 @@
 				</div>
 			</form>
 		</div>
-
-				
-
 	</div><!-- /.col-md-12 -->
-
+	<div class="col-xs-10 col-xs-offset-3">
+		<h6>Tips:建议使用如Chrome/firefox/opera等浏览器。</h6>
+		<h6>请不要使用IE8及IE8内核的浏览器，如qq/360等浏览器.</h6>
+	</div>
 <script>
 var levelSwitch = true;
 $("#register-teacher").hide();
-$("#level-switch").click( function() {
+$("#level-switch").mousedown( function() {
 	if (levelSwitch) {
 		$("#register-student").hide();
 		$("#register-teacher").show();

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <title><?php echo isset($title) ? $title : '作业提交系统'; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

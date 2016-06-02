@@ -9,8 +9,8 @@
 					<label for="" class="col-xs-2 control-label">教师名单</label>
 					<div class="col-xs-10">
 						<input type="text" class="form-control" id="user_list" name="user_list">
-						姓名之间请用顿号隔开<br/>
-						例如：AAA、BBB
+						姓名之间请用空格隔开<br/>
+						例如：AAA BBB
 					</div>
 				</div>
 				<div class="form-group">

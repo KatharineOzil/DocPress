@@ -16,14 +16,19 @@ class Ajax extends CI_Controller {
 
 	public function reset_password()
 	{
-		$password = $this->input->post('password');
+		$password1 = $this->input->post('password');
+		$password2 = $this->input->post('password_confirm');
 		//print_r($this->session->userdata);
-		if (isset($this->session->userdata['sid']) && isset($this->session->userdata['token']) && $this->session->userdata['token'] === $this->input->post('token')) {
-			$this->user->modify_password($this->session->userdata['sid'], $password);
-			//$this->session->userdata['token'] = '123';
-			die('密码重置成功！');
-		} else {
-			die('token 过期或不正确，请重新获取。');
+		if($password1 != $password2){
+			echo "两次输入的密码不同，请检查后重新输入";
+		}else{
+			if (isset($this->session->userdata['sid']) && isset($this->session->userdata['token']) && $this->session->userdata['token'] === $this->input->post('token')) {
+				$this->user->modify_password($this->session->userdata['sid'], $password1);
+				//$this->session->userdata['token'] = '123';
+				echo '密码重置成功！';
+			} else {
+				die('token 过期或不正确，请重新获取。');
+			}
 		}
 	}
 
@@ -33,32 +38,31 @@ class Ajax extends CI_Controller {
 		$token = md5(md5(rand()) . rand());
 		$this->session->set_userdata('token', $token);
 		$this->session->set_userdata('sid', $sid);
- 		$mail_body = "点击如下 URL 重置密码：" . site_url("welcome/reset_password?token=" . $token);
-	
+		$mail_body = "点击如下 URL 重置密码：" . site_url("welcome/reset_password?token=" . $token);
         	$this->load->library('mailer');
-
-		if (is_numeric($sid)){
-      			$this->mailer->sendmail(
-            			"$sid@stu.cqupt.edu.cn",
-          				"$sid",
-            			'作业提交系统重置密码',
-            			$mail_body
-        		);
-			echo("邮件发送成功，请登录 $sid@stu.cqupt.edu.cn 查看");
+	
+		if (preg_match('/^\d{10}$/', $sid)){
+			$this->mailer->sendmail(
+				"$sid@stu.cqupt.edu.cn",
+				"$sid",
+				'作业提交系统重置密码',
+				$mail_body
+		);
+			echo("找回密码相关邮件发送成功，请登录 $sid@stu.cqupt.edu.cn 查看");
 		}
 		else{
-			$this->db->select('sid');
+			$this->db->select('id');
 			$this->db->from('teacher_user');
 			$this->db->where('name',$sid);
-			$sid = $this->db->get()->result();
-                        $sid = $sid[0]->sid;
+			$tid = $this->db->get()->result();
+			$tid = $tid[0]->id;
 			$this->mailer->sendmail(
-				"$sid@cqupt.edu.cn",
+				"$tid@cqupt.edu.cn",
 				"$sid",
 				'作业提交系统重置密码',
 				$mail_body
 			);
-			echo("邮件发送成功，请登录 mail.cqupt.edu.cn 查看");
+			echo("找回密码相关邮件发送成功，请登录 mail.cqupt.edu.cn 查看");
 		}
 
 		die();
@@ -177,14 +181,14 @@ class Ajax extends CI_Controller {
 			$this->session->set_userdata('teacher_list', $teacher_list);
 			//echo '成功添加'.$this->session->userdata['teacher_list'];
 			
-			$user_list = explode('、', $teacher_list);
+			$user_list = explode(' ', $teacher_list);
 			foreach ($user_list as $value) {
 				$passwd = md5(md5(rand()) . rand());
 				$id = md5(rand());
 				$list = array(
 						'name' => $value,
 						'password' => $passwd,
-						'create_time' => date('Y-m-d H:i:s'),
+						//'create_time' => date('Y-m-d H:i:s'),
 						'id' => $id
 					);
 				$this->db->insert('teacher_user', $list);

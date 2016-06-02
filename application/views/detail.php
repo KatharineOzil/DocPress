@@ -11,7 +11,7 @@
 			<tr>
 				<th>学号</th>
 				<th>姓名</th>
-				<th>提交时间</th>
+				<th>教学班号</th>
 				<th>下载链接</th>
 				<th>批改反馈</th>
 				<th>批改状态</th>
@@ -20,10 +20,13 @@
 		<tbody>
 			<?php 
 			foreach ($work->submissions as $key => $value) {
+				$hwid = explode('_', $value->file_name);
+				$hid = $hwid[0];
 				echo '<tr>';
 				echo '<td>' . $value->user->id . '</td>';
 				echo '<td>' . $value->user->name . '</td>';
-				echo '<td>' . $value->time . '</td>';
+//				echo '<td>' . $value->time . '</td>';
+				echo '<td>' . $hid . '</td>';
 				echo '<td><a href="' . base_url('upload/' . $work->title . '/' . $value->file_name) . '">点击下载</a></td>';
 				echo '<td><a class="submit-label" data-id="' . $value->id . '">上传反馈</a></td>';
 				echo '<td>';
