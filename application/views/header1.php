@@ -53,8 +53,10 @@
                     <li>
                         <a href="<?php echo site_url('admin'); ?>" >管理员登录</a>
                     </li>
-
-                    <li><a href="#"><?php echo isset($this->session->userdata['name']) ? $this->session->userdata['name'] : '游客'; ?></a></li>
+                    <li>   
+                        <a href="<?php echo site_url('visitor');?>" >游客</a>
+                    </li>
+<!--                    <li><a href="#"><?php echo isset($this->session->userdata['name']) ? $this->session->userdata['name'] : '游客'; ?></a></li> -->
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>

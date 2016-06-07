@@ -112,8 +112,5 @@ $("#new-homework-form").submit( function() {
 //		levelSwitch = true;
 //	}
 //});
-
-
-
 </script>
 <?php $this->load->view('footer'); ?>

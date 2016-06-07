@@ -35,9 +35,6 @@
 					<div class="col-xs-offset-1 col-xs-1">
 						<a href="<?php echo site_url('reset'); ?>" class="btn btn-default btn-wide">找回密码</a>
 					</div>
-
-				
-
 				</div>
 			</form>
 		</div>

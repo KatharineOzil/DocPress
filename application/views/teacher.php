@@ -17,7 +17,7 @@
 				<span class="fui-list"></span> <?php echo $work->title . "($work->hid)"; ?>
 			</div>
 <!--			<div class="homework-item-time">
-r			<span class="fui-calendar"></span> <php echo $work->create_time; ?>
+			<span class="fui-calendar"></span> <php echo $work->create_time; ?>
 			</div>
 -->			<div class="clearfix"></div>
 			<div class="homework-item-content">

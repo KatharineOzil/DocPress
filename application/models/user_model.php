@@ -104,6 +104,8 @@ class User_model extends CI_Model {
         $this->db->where('id', $sid);
         $this->db->where('password', sha1($password));
         $user = $this->db->get()->result();
+        //echo $this->db->last_query();
+        //die();
         if (count($user) <= 0)
             return false;
         return $user[0];

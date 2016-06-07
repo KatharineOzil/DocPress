@@ -164,9 +164,9 @@ class Welcome extends CI_Controller {
 			redirect();
 		}
 		$hwid = $homework->hid;
-		$hid_list = explode('/' , $hwid);		
+		$hid_list = explode(',' , $hwid);		
 		foreach ($hid_list as $hid) {
-			$this->db->from(stu_list);
+			$this->db->from('stu_list');
 			$this->db->where('hid',$hid);
 			$result = $this->db->get()->result();
 			if(count($result)){
@@ -234,6 +234,11 @@ class Welcome extends CI_Controller {
 		move_uploaded_file($_FILES["the_file"]["tmp_name"], "reply/" . $id . '/' .$file_name);
 		$this->homework->reply($id, $file_name);
 		redirect('homework_detail/' . $homework->id);
+	}
+
+	public function visitor()
+	{
+		$this->load->view('visitor');
 	}
 
 }

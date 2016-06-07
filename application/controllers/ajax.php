@@ -147,6 +147,34 @@ class Ajax extends CI_Controller {
 		}
 	}
 
+	public function v_login()
+	{
+		$sid = $this->input->post('id');
+		$password = $this->input->post('password');
+		$level = $this->input->post('level');
+		$name = $this->input->post('name');
+		if($level == 'student'){
+			$user = $this->user->login_student($sid, $password);
+			if($user){
+				$this->session->set_userdata('id', $user->id);
+				$this->session->set_userdata('level', $level);
+				echo 'success';
+			} else {
+				echo '用户名或密码错误';
+			}
+		} else if ($level == 'teacher') {
+			$user = $this->user->login_teacher($name, $password);
+			if ($user) {
+				$this->session->set_userdata('id', $user->id);
+				$this->session->set_userdata('name', $user->name);
+				$this->session->set_userdata('level', $level);
+				echo 'success';
+			} else {
+				echo '用户名或密码错误';
+			}
+		}
+	}
+
 	public function admin()
 	{
 		$id = $this->input->post('id');

@@ -51,15 +51,20 @@ class Homework_model extends CI_Model {
 		}
 
 		// create homework row
-		$data1 = array(
+		$data = array(
 			'title' => $title,
-			'hid' => $hwid,
 			'content' => $content,
-//			'create_time' => date('Y-m-d H:i:s'),
 			'creator_id' => $creator_id,
-//			'type' => $homework_type
 			);
-		$this->db->insert('homework', $data1);
+		$this->db->insert('homework', $data);
+		$insert_id = $this->db->insert_id();
+		foreach($hid_list as $hid) {
+			$data = array(
+				'homework_id' => $insert_id,
+				'hid' => $hid
+			);
+			$this->db->insert('homework_hid', $data);
+		} 
 	}
 
 	function getHomeworks($user_id = 0, $level='student')
@@ -71,6 +76,7 @@ class Homework_model extends CI_Model {
 			$this->db->where('sid', $user_id);
 			$result = $this->db->get()->result();
 			//var_dump($result);
+			//die();
 			foreach($result as $k => $v) {
 				array_push($hid, $v->hid);	
 			}
@@ -78,19 +84,21 @@ class Homework_model extends CI_Model {
 				return array();
 			}
 		}
-		$this->db->select('homework.id as id, homework.title as title, homework.content as content, homework.hid as hid, teacher_user.name as name');
+		$this->db->select('homework.id as id, homework.title as title, homework.content as content, group_concat(homework_hid.hid) as hid, teacher_user.name as name');
 		$this->db->from('homework');
 		$this->db->order_by('homework.id desc');
 		$this->db->join('teacher_user', 'teacher_user.id = homework.creator_id');
+		$this->db->join('homework_hid', 'homework_hid.homework_id = homework.id');
 		if ($level === 'student') {
+			//TODO: bug
 			foreach ($hid as $h) {
-				$this->db->or_like('homework.hid', $h);
+				$this->db->or_where('homework_hid.hid', $h);
 			}
 		} else if ($level === 'teacher') {
 			$this->db->where('homework.creator_id', $user_id);
 		}
 		$works = $this->db->get()->result();
-		//die($this->db->last_query());
+		//echo $this->db->last_query();die();
 		foreach ($works as $key => $work) {
 			$work->done = false;
 			if ($level === 'student') {
@@ -110,19 +118,23 @@ class Homework_model extends CI_Model {
 			$query = $this->db->get()->result();
 			$work->count = count($query);
 
-			$hid_list = explode('/' , $work->hid);
+			$hid_list = explode(',' , $work->hid);
 			$this->db->from('stu_list');
 			$this->db->where_in('hid', $hid_list);
 			$query = $this->db->get()->result();
 			$work->total_count = count($query);
 		}
+		//var_dump($works);
+		//die();
 		return $works;
 	}
 
 	function getHomework($id)
 	{
 		$this->db->from('homework');
-		$this->db->where('id', $id);
+		$this->db->select('homework.*, group_concat(homework_hid.hid) as hid');
+		$this->db->join('homework_hid', 'homework_hid.homework_id = homework.id');
+		$this->db->where('homework.id', $id);
 		$work = $this->db->get()->result();
 		if (count($work)) {
 			$work = $work[0];
@@ -141,7 +153,7 @@ class Homework_model extends CI_Model {
 			}
 			$work->submissions = $submissions;
 
-			$hid_list = explode('/', $work->hid);
+			$hid_list = explode(',', $work->hid);
 			$this->db->select('id, sid, name');
 			$this->db->from('stu_list');
 			$this->db->where_in('hid', $hid_list);
@@ -159,7 +171,9 @@ class Homework_model extends CI_Model {
 	function get_homework_detail($id)
 	{
 		$this->db->from('homework');
-		$this->db->where('id', $id);
+		$this->db->select('homework.*, group_concat(homework_hid.hid) as hid');
+		$this->db->join('homework_hid', 'homework_hid.homework_id = homework.id');
+		$this->db->where('homework.id', $id);
 		$work = $this->db->get()->result();
 		if ($work) {
 			$work = $work[0];
