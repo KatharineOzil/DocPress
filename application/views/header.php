@@ -4,6 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title><?php echo isset($title) ? $title : 'DocPress 作业提交系统'; ?></title>
+    <style type="text/css">
+      @font-face {
+        font-family: 'Material Icons';
+        font-style: normal;
+        font-weight: 400;
+        src: url(<?php echo base_url('static');?>/icon/icon.eot); /* For IE6-8 */
+        src: local('Material Icons'),
+             local('MaterialIcons-Regular'),
+             url(<?php echo base_url('static');?>/icon/icon.woff2) format('woff2'),
+             url(<?php echo base_url('static');?>/icon/icon.woff) format('woff'),
+             url(<?php echo base_url('static');?>/icon/icon.ttf) format('truetype');
+      }
+    </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Loading Bootstrap -->

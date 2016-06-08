@@ -1,15 +1,5 @@
 /* fallback */
-@font-face {
-  font-family: 'Material Icons';
-  font-style: normal;
-  font-weight: 400;
-  src: url(/static/icon/icon.eot); /* For IE6-8 */
-  src: local('Material Icons'),
-       local('MaterialIcons-Regular'),
-       url(/static/icon/icon.woff2) format('woff2'),
-       url(/static/icon/icon.woff) format('woff'),
-       url(/static/icon/icon.ttf) format('truetype');
-}
+
 
 .material-icons {
   font-family: 'Material Icons';
