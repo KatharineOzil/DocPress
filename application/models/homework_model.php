@@ -89,6 +89,7 @@ class Homework_model extends CI_Model {
 		$this->db->order_by('homework.id desc');
 		$this->db->join('teacher_user', 'teacher_user.id = homework.creator_id');
 		$this->db->join('homework_hid', 'homework_hid.homework_id = homework.id');
+		$this->db->group_by('homework.id');
 		if ($level === 'student') {
 			//TODO: bug
 			foreach ($hid as $h) {

@@ -1,45 +1,45 @@
 <?php $this->load->view('header'); ?>
 
-	<div class="col-xs-8 col-xs-offset-2">
-		<h4>找回密码</h4>
-		<!--<div>密码将发至学校的学生邮箱。</div><br>-->
-		<div id="register-student">
-			<form class="form-horizontal" role="form" id="reset-form">
-				<div class="form-group">
-					<label for="student-sid" class="col-xs-2 control-label">个人信息</label>
-					<div class="col-xs-8">
-						<input type="text" class="form-control" value="<?php echo $this->session->userdata['sid'];?>" disabled="disabled">
-						<input type="hidden" class="form-control" value="<?php echo $this->session->userdata['token'];?>" name="token">
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="student-sid" class="col-xs-2 control-label">新密码</label>
-					<div class="col-xs-8">
-						<input type="password" class="form-control" name="password">
-					</div>
-					<br/>
-					<br/>
-					<label for="student-sid" class="col-xs-2 control-label">重复密码</label>
-					<div class="col-xs-8">
-						<input type="password" class="form-control" name="password_confirm">
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-xs-offset-4 col-xs-3">
-						<button type="submit" class="btn btn-primary btn-wide">修改</button>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div><!-- /.col-md-12 -->
+<div class="login-card mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">找回密码</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <form action="" class="login-card-form" method="post">
+      <div>
+        <div class="mdl-textfield mdl-js-textfield">
+          <label class="mdl-textfield__label">个人信息</label>
+          <input class="mdl-textfield__input" type="text" value="<?php echo $this->session->userdata['sid'];?>" disabled="disabled">
+          <input type="hidden" class="form-control" value="<?php echo $this->session->userdata['token'];?>" name="token">
+        </div>
+      </div>
+      <div>
+        <div class="mdl-textfield mdl-js-textfield">
+          <input class="mdl-textfield__input" type="password" id="password" name="password">
+          <label class="mdl-textfield__label" for="password">新密码</label>
+        </div>
+      </div>
+      <div>
+        <div class="mdl-textfield mdl-js-textfield">
+          <input class="mdl-textfield__input" type="password" id="password_confirm" name="password_confirm">
+          <label class="mdl-textfield__label" for="password_confirm">新密码</label>
+        </div>
+      </div>
+	  <div class="mdl-card__actions mdl-card--border">
+	    <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+	      修改密码
+	    </button>
+	  </div>
+    </form>
+  </div>
+</div>
 
 <script>
 
-$("#reset-form").submit( function() {
+$(".login-card-form").submit( function() {
 	$.post('<?php echo site_url("ajax/reset_password"); ?>', $(this).serialize(), function(data, status) {
 		alert(data);
 		top.location = "index";
-		
 	})
 	return false;
 })

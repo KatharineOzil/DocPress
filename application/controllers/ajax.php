@@ -35,6 +35,15 @@ class Ajax extends CI_Controller {
 	public function reset()
 	{
 		$sid = $this->input->post('sid');
+		if (preg_match('/^\d{10}$/', $sid)){
+			$ret = $this->user->check_student($sid);
+		} else {
+			$ret = $this->user->check_teacher($sid);
+		}
+		if (!$ret) {
+			echo('用户不存在！');
+			die();
+		}
 		$token = md5(md5(rand()) . rand());
 		$this->session->set_userdata('token', $token);
 		$this->session->set_userdata('sid', $sid);
@@ -48,7 +57,7 @@ class Ajax extends CI_Controller {
 				'作业提交系统重置密码',
 				$mail_body
 		);
-			echo("找回密码相关邮件发送成功，请登录 $sid@stu.cqupt.edu.cn 查看");
+			echo('找回密码相关邮件发送成功，请登录 $sid@stu.cqupt.edu.cn 查看');
 		}
 		else{
 			$this->db->select('id');
@@ -62,7 +71,7 @@ class Ajax extends CI_Controller {
 				'作业提交系统重置密码',
 				$mail_body
 			);
-			echo("找回密码相关邮件发送成功，请登录 mail.cqupt.edu.cn 查看");
+			echo('找回密码相关邮件发送成功，请登录 mail.cqupt.edu.cn 查看');
 		}
 
 		die();
@@ -70,7 +79,7 @@ class Ajax extends CI_Controller {
 
 	public function register()
 	{
-		$sid = $this->input->post('sid');
+		$sid = $this->input->post('username');
 		$password = $this->input->post('password');
 		$password2 = $this->input->post('password2');
 		if ($password !== $password2) {
@@ -118,12 +127,11 @@ class Ajax extends CI_Controller {
 
 	public function login()
 	{
-		$sid = $this->input->post('sid');
 		$password = $this->input->post('password');
-		$name = $this->input->post('name');
+		$username = $this->input->post('username');
 		$level = $this->input->post('level');
 		if ($level == 'student') {
-			$user = $this->user->login_student($sid, $password);
+			$user = $this->user->login_student($username, $password);
 			if ($user) {
 				//$this->session->set_userdata('id', $user->id);
 				$this->session->set_userdata('id', $user->id);
@@ -135,35 +143,7 @@ class Ajax extends CI_Controller {
 				echo '用户名或密码错误';
 			}
 		} else if ($level == 'teacher') {
-			$user = $this->user->login_teacher($name, $password);
-			if ($user) {
-				$this->session->set_userdata('id', $user->id);
-				$this->session->set_userdata('name', $user->name);
-				$this->session->set_userdata('level', $level);
-				echo 'success';
-			} else {
-				echo '用户名或密码错误';
-			}
-		}
-	}
-
-	public function v_login()
-	{
-		$sid = $this->input->post('id');
-		$password = $this->input->post('password');
-		$level = $this->input->post('level');
-		$name = $this->input->post('name');
-		if($level == 'student'){
-			$user = $this->user->login_student($sid, $password);
-			if($user){
-				$this->session->set_userdata('id', $user->id);
-				$this->session->set_userdata('level', $level);
-				echo 'success';
-			} else {
-				echo '用户名或密码错误';
-			}
-		} else if ($level == 'teacher') {
-			$user = $this->user->login_teacher($name, $password);
+			$user = $this->user->login_teacher($username, $password);
 			if ($user) {
 				$this->session->set_userdata('id', $user->id);
 				$this->session->set_userdata('name', $user->name);

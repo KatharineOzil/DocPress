@@ -1,104 +1,80 @@
-<?php $this->load->view('header3'); ?>
+<?php $this->load->view('header'); ?>
 
+<div class="login-card mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text login-title">游客学生登录</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    建议使用如 Chrome/Firefox/Opera 等浏览器，请不要使用 IE8 及 IE8 内核的浏览器，如 QQ/360 等浏览器。<br>
+  </div>
+  <div class="mdl-card__actions mdl-card--border login-card-form">
+	<form action="#" class="login-form">
+    <div>
+  	  <div class="mdl-textfield mdl-js-textfield">
+  	    <input class="mdl-textfield__input" type="text" id="username" name="username" value="2010000001">
+  	    <label class="mdl-textfield__label login-username" for="username">学号</label>
+  	  </div>
+    </div>
+    <div>
+     <div class="mdl-textfield mdl-js-textfield">
+       <input class="mdl-textfield__input" type="password" id="password" name="password" value="Jsdwm2KHI">
+       <label class="mdl-textfield__label" for="password">密码</label>
+     </div>
+     <input type="hidden" value="student" name="level" class="login-type">
+    </div>
+    <div>
+  	  <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+  	  	登录
+  	  </button>
+     </div>
+	</form>
+  </div>
+  <div class="mdl-card__actions mdl-card--border">
+  <span class="mdl-card__supporting-text">请点击右方 Menu 选择登录方式</span>
+  </div>
+  <div class="mdl-card__menu">
+    <button id="demo-menu-lower-right"
+	        class="mdl-button mdl-js-button mdl-button--icon">
+	  <i class="material-icons">more_vert</i>
+	</button>
 
-	<div class="col-xs-8 col-xs-offset-2">
-		<div>
-			<h6>说明：平台提供为游客演示的功能。请来访者在下方选择所要使用的身份。</h6>
-		</div>
-		<div class="row pbl">
-		    <div class="col-xs-2 col-xs-offset-2">
-				<div id="level-switch">
-		       	<input type="checkbox" checked data-toggle="switch" data-on-color="success" data-on-text="学生" data-off-text="老师" data-off-color="warning"/>
-		      	</div>
-		      </div>
-		</div>
-
-		<div id="stu_visitor">
-			<form class="form-horizontal" role="form" id="student-register-form">
-				<div class="form-group">
-					<div class="col-xs-10">
-						<input type="hidden" class="form-control" id="student-sid" name="id" value="1">
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-xs-10">
-						<input type="hidden" class="form-control" id="student-password" name="password" value="1">
-					</div>
-				</div>
-
-				<input type="hidden" name="level" value="student">
-				<div class="form-group">
-					<div class="col-xs-offset-2 col-xs-3">
-						<button type="submit" class="btn btn-primary btn-wide">登录</button>
-					</div>
-				</div>
-			</form>
-		</div>
-
-		<div id="tea_visitor">
-			<form class="form-horizontal" role="form" id="teacher-register-form">
-				<div class="form-group">
-					<div class="col-xs-10">
-						<input type="hidden" class="form-control" id="teacher_name" name="name" value="1">
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-xs-10">
-						<input type="hidden" class="form-control" id="teacher-password" name="password" value="1">
-					</div>
-				</div>
-				<input type="hidden" name="level" value="teacher">
-				<div class="form-group">
-					<div class="col-xs-offset-2 col-xs-3">
-						<button type="submit" class="btn btn-primary btn-wide">登录</button>
-					</div>
-				</div>
-			</form>
-		</div>
-
-	</div>
-
-
+	<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+	    for="demo-menu-lower-right">
+	  <li class="mdl-menu__item student-login">学生登录</li>
+	  <li class="mdl-menu__item teacher-login">教师登录</li>
+	</ul>
+  </div>
+</div>
 
 <script>
-var levelSwitch = true;
-$("#tea_visitor").hide();
-$("#level-switch").mousedown( function() {
-	if (levelSwitch) {
-		$("#stu_visitor").hide();
-		$("#tea_visitor").show();
-		levelSwitch = false;
-	} else {
-		$("#stu_visitor").show();
-		$("#tea_visitor").hide();
-		levelSwitch = true;
-	}
-});
 
-$("#student-register-form").submit( function() {
-	$.post('<?php echo site_url("ajax/v_login"); ?>', $(this).serialize(), function(data, status) {
-		if (status == 'success') {
-			if (data == 'success') {
-				location.href = '<?php echo site_url(); ?>';
-			} else {
-				alert(data);
-			}
-		}
-	});
-	return false;
-});
+$('.teacher-login').click(function() {
+  $('.login-title').text('游客教师登录');
+  $('.login-type').val('teacher');
+  $('#username').val('demo_teacher');
+  $('.login-username').text('姓名');
+})
 
-$("#teacher-register-form").submit( function() {
-	$.post('<?php echo site_url("ajax/v_login"); ?>', $(this).serialize(), function(data, status) {
-		if (status == 'success') {
-			if (data == 'success') {
-				location.href = '<?php echo site_url(); ?>';
-			} else {
-				alert(data);
-			}
-		}
-	});
-	return false;
-});
+$('.student-login').click(function() {
+  $('.login-title').text('游客学生登录');
+  $('.login-type').val('student');
+  $('#username').val('2010000001');
+  $('.login-username').text('学号');
+})
+
+
+$('.login-form').submit(function() {
+  $.post('<?php echo site_url("ajax/login"); ?>', $(this).serialize(), function(data, status) {
+    if (status == 'success') {
+      if (data == 'success') {
+        location.href = '<?php echo site_url(); ?>';
+      } else {
+        alert(data);
+      }
+    }
+  });
+
+  return false;
+})
 </script>
 <?php $this->load->view('footer'); ?>

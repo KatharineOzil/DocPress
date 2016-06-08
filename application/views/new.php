@@ -1,116 +1,63 @@
 <?php $this->load->view('header'); ?>
 
-	<div class="col-xs-8 col-xs-offset-2">
-		<h4>发布新作业</h4>
-	<!--	<div class="row pbl">
-			<div class="col-xs-5 col-xs-offset-2" id="level-switch">
-        	<input type="checkbox" checked data-toggle="switch" data-on-color="success" data-on-text="理论" data-off-text="实验" data-off-color="warning"/>
-	     		</div>
-	    	</div>
-	-->
-		<form class="form-horizontal" role="form" id="new-homework-form" method="post" enctype="multipart/form-data">
-			<div class="form-group">
-				<label for="homework-title" class="col-xs-2 control-label">课程名称</label>
-				<div class="col-xs-10">
-					<input type="text" class="form-control" id="homework-title" name="title">
-				</div>
-			</div>
-
-<!--			<div class="form-group">
-				<label for="homework-type" class="col-xs-2 control-label" action="post">类型</label>
-				&nbsp&nbsp&nbsp&nbsp
-				<input id="1" type="radio" name="type" value="0" /> 理论课
-				&nbsp&nbsp
-				<input id="1" type="radio" name="type" value="1" /> 实践课
-			</div>
--->
-	        <div class="form-group">
-				<label for="homework-hid" class="col-xs-2 control-label">教学班</label>
-				<div class="col-xs-10">
-					<input type="text" class="form-control" id="homework-hid" name="hid">
-				</div>
-			</div>
-
-			<div id="hid-tips"> 
-				<div class="form-group">
-					<label for="homework-content" class="col-xs-2 control-label">教学班说明</label>
-					<div class="col-xs-10">
-					同一门课程多个教学班请用/隔开。例如：
-					<br/>
-					A1234567/A2345678
-					</div>
-				</div>
-			</div>
-
-			<div id="tips"> 
-				<div class="form-group">
-					<label for="homework-content" class="col-xs-2 control-label">说明</label>
-					<div class="col-xs-10">
-					教务在线课表中实践课的教学班号请取网址中jxb=后面字符串，例如：
-					<br/>
-					“http://jwzx.cqupt.edu.cn/new/labkebiao/showjxbStuList.php?jxb=SJ06151942858”
-					<br/>
-					请输入"SJ06151942858"
-					</div>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="homework-content" class="col-xs-2 control-label">描述</label>
-				<div class="col-xs-10">
-					<textarea class="form-control" id="homework-content" name="content" rows="1"></textarea>
-				</div>
-			</div>
-
-<!--			<div class="form-group">
-				<label for="homework-attachment" class="col-xs-2 control-label">附件</label>
-				<div class="col-xs-10">
-					<input type="file" name="the_file" id="homework-attachment">
-				</div>
-			</div>
--->
-			<div class="form-group">
-				<div class="col-xs-offset-2 col-xs-3">
-					<button type="submit" class="btn btn-primary btn-wide">发布</button>
-				</div>
-			</div>
-		</form>
-	</div><!-- /.col-md-12: -->
+<div class="add-homework-card mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">发布新作业</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <form action="" class="add-homework-form" method="post">
+      <div>
+        <div class="mdl-textfield mdl-js-textfield">
+          <input class="mdl-textfield__input" type="text" id="title" name="title">
+          <label class="mdl-textfield__label" for="title">课程名称</label>
+        </div>
+      </div>
+      <div>
+        <span>同一门课程多个教学班请用/隔开。例如：A1234567/A2345678</span>
+        <div class="mdl-textfield mdl-js-textfield">
+          <input class="mdl-textfield__input" type="text" id="hid" name="hid">
+          <label class="mdl-textfield__label" for="hid">教学班</label>
+        </div>
+      </div>
+      <div>
+          教务在线课表中实践课的教学班号请取网址中jxb=后面字符串，例如：<br>
+          <pre>http://jwzx/new/labkebiao/showjxbStuList.php?jxb=SJ06151942858”</pre>
+          请输入"SJ06151942858"
+      </div>
+      <div>
+        <div class="mdl-textfield mdl-js-textfield">
+          <textarea class="mdl-textfield__input" type="text" rows= "3" id="content" name="content"></textarea>
+          <label class="mdl-textfield__label" for="content">作业描述</label>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="mdl-card__actions mdl-card--border">
+    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect add-homework">
+      发布作业
+    </a>
+  </div>
+</div>
 
 <script>
+$('.add-homework').click(function() {
+  $('.add-homework-form').submit();
+})
 
-
-$("#new-homework-form").submit( function() {
-	$("#homework-title").parent().removeClass('has-error');
-	$("#homework-hid").parent().removeClass('has-error');
-	$("#homework-content").parent().removeClass('has-error');
-	$("#homework-type").parent().removeClass('has-error');
-
-	if ($("#homework-title").val() == "") {
-		$("#homework-title").parent().addClass('has-error');
+$('.add-homework-form').submit(function() {
+	if ($('#title').val() == '') {
+    alert('请将信息填写完整');
 		return false;
 	}
-	if ($("#homework-hid").val() == "") {
-		$("#homework-hid").parent().addClass('has-error');
+	if ($('#hid').val() == '') {
+    alert('请将信息填写完整');
 		return false;
 	}
-	if ($("#homework-content").val() == "") {
-		$("#homework-content").parent().addClass('has-error');
+	if ($('#content').val() == '') {
+    alert('请将信息填写完整');
 		return false;
 	}
-
+  return true;
 });
-
-//var levelSwitch = true;
-//$("#tips").hide();
-//$("#level-switch").click( function() {
-//	if (levelSwitch) {
-//		$("#tips").show();
-//		levelSwitch = false;
-//	} else {
-//		$("#tips").hide();
-//		levelSwitch = true;
-//	}
-//});
 </script>
 <?php $this->load->view('footer'); ?>

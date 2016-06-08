@@ -98,8 +98,9 @@ class User_model extends CI_Model {
 
     function login_student($sid, $password)
     {
-        if (!isset($sid) || !isset($password))
+        if (!$sid || !$password) {
             return false;
+        }
         $this->db->from('stu_user');
         $this->db->where('id', $sid);
         $this->db->where('password', sha1($password));
@@ -112,9 +113,10 @@ class User_model extends CI_Model {
     }
 
     function login_teacher($name, $password)
-    {
-        if (!isset($name) || !isset($password))
+    {  
+        if (!$name || !$password) {
             return false;
+        }
         $this->db->from('teacher_user');
         $this->db->where('name', $name);
         $this->db->where('password', sha1($password));

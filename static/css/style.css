@@ -1,51 +1,92 @@
-#header {
-	width: 1004px;
-	margin: 20px auto 0 auto;
+/* fallback */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/static/icon/icon.eot); /* For IE6-8 */
+  src: local('Material Icons'),
+       local('MaterialIcons-Regular'),
+       url(/static/icon/icon.woff2) format('woff2'),
+       url(/static/icon/icon.woff) format('woff'),
+       url(/static/icon/icon.ttf) format('truetype');
 }
-#container {
-	width: 1004px;
-	margin: 0 auto;
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
 }
-#homeworks {
-	margin: 20px 0;
-	border-radius: 5px;
-	overflow: hidden;
+
+.page-content {
 }
-.homework-item-box {
-	background: #2ECC71;
-	padding: 10px;
-	color: #fff;
-	border-bottom: 2px solid #27AE60;
+
+.login-card, .add-homework-card, .submit-homework-card  {
+	margin: 50px auto;
+	width: 50%;
+	min-width: 600px;
+  min-height: 50px;
 }
-.homework-item-box-undone {
-	background: #E74C3C;
-	border-bottom: 2px solid #C0392B;
+
+.login-card-form {
+	text-align: center;
 }
-.homework-item-box a {
-	color: #fff;
+
+.homework-card, .homework-detail-card {
+	margin: 50px auto;
+	width: 70%;
+	min-height: 50px;
+	min-width: 600px;
 }
-.homework-item-box a:hover {
-	text-decoration: underline;
+
+.mdl-menu__item > a {
+
 }
-.homework-item-title {
-	float: left;
+
+.detail-table {
+	width: 100%;
 }
-.homework-item-time {
-	font-size: 12px;
-	float: right;
+
+.homework-detail-button {
+	margin: 0 10px;
 }
-.homework-item-content {
-	font-size: 14px;
-	padding: 10px 10px 10px 30px;
+
+.hide {
+	display: none;
 }
-.homework-item-toolbar {
-	font-size: 12px;
+
+.homework-done {
+  background: #3E4EB8;
+  color: #FFF;
 }
-.homework-item-toolbar ul li {
-	list-style: none;
-	float: right;
-	margin-left: 20px;
+
+
+.homework-done * {
+  color: #FFF;
 }
+
+.homework-done-button {
+  color: #FFF;
+}
+
 .submit-label {
-	cursor: pointer;
+  float: right;
 }

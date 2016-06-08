@@ -1,37 +1,29 @@
-<?php $this->load->view('header2'); ?>
+<?php $this->load->view('header'); ?>
 
-	<div class="col-xs-8 col-xs-offset-2">
-		<h4>教师名单</h4>
+<div class="login-card mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text login-title">添加教师名单</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+	姓名之间请用空格隔开，例如：AAA BBB
+  </div>
 
-		<div id="list">
-			<form class="form-horizontal" role="form" id="list-form">
-				<div class="form-group">
-					<label for="" class="col-xs-2 control-label">教师名单</label>
-					<div class="col-xs-10">
-						<input type="text" class="form-control" id="user_list" name="user_list">
-						姓名之间请用空格隔开<br/>
-						例如：AAA BBB
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-xs-offset-2 col-xs-3">
-						<button type="submit" class="btn btn-primary btn-wide">确认</button>
-					</div>
-				</div>
-			</form>
-		</div>
-		
-	</div><!-- /.col-md-12: -->
+  <div class="mdl-card__supporting-text">
+    <form action="#" class="login-form">
+      <div class="mdl-textfield mdl-js-textfield">
+        <input class="mdl-textfield__input" type="text" id="user_list" name="user_list">
+        <label class="mdl-textfield__label" for="user_list">教师名单</label>
+      </div>
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+        确认
+      </button>
+    </form>
+  </div>
+</div>
 
 <script>
 
-$("#list-form").submit( function() {
-	$("#user_list").parent().removeClass('has-error');
-
-	if ($("#user_list").val() == "") {
-		$("#user_list").parent().addClass('has-error');
-		return false;
-	}
+$('.login-form').submit(function() {
 	$.post('<?php echo site_url("ajax/teacher_list"); ?>', $(this).serialize(), function(data, status) {
 		if (status == 'success') {
 			alert(data);

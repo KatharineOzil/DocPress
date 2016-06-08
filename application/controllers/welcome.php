@@ -20,7 +20,7 @@ class Welcome extends CI_Controller {
 		} else if ($this->session->userdata['level'] == 'teacher') {
 			$this->load->view('teacher', $data);
 		} else if ($this->session->userdata['level'] == 'admin'){
-			$this->load->view('add');
+			$this->load->view('add_list');
 		} else {
 			$this->load->view('index');
 		}
@@ -207,10 +207,10 @@ class Welcome extends CI_Controller {
 	public function delete_teacher($name)
 	{
 		if (!isset($this->session->userdata['level']) || $this->session->userdata['level'] != 'admin') {
-			redirect('admin');
+			redirect();
 		}
 		$this->user->delete_teacher($name);
-		redirect();
+		redirect('/edit_list');
 	}
 
 	public function submit_feedback($id)
@@ -229,9 +229,9 @@ class Welcome extends CI_Controller {
 			redirect();
 		}
 		$file_name = $homework->title . "_作业批改反馈" . rand(100000, 999999) . $extension;
-		if (!is_dir('reply/' . $id))
-			mkdir('reply/' . $id);
-		move_uploaded_file($_FILES["the_file"]["tmp_name"], "reply/" . $id . '/' .$file_name);
+		if (!is_dir('reply/' . $work->homework_id))
+			mkdir('reply/' . $work->homework_id);
+		move_uploaded_file($_FILES["the_file"]["tmp_name"], "reply/" . $work->homework_id . '/' .$file_name);
 		$this->homework->reply($id, $file_name);
 		redirect('homework_detail/' . $homework->id);
 	}

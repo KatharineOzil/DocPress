@@ -3,16 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><?php echo isset($title) ? $title : '作业提交系统'; ?></title>
+    <title><?php echo isset($title) ? $title : 'DocPress 作业提交系统'; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Loading Bootstrap -->
-    <link rel="stylesheet" href="<?php echo base_url(); ?>static/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo base_url('static'); ?>/mdl/material.min.css">
 
     <!-- Loading Flat UI -->
-    <link rel="stylesheet" href="<?php echo base_url(); ?>static/css/flat-ui.css">
-
-    <link rel="stylesheet" href="<?php echo base_url(); ?>static/css/style.css">
+    <link rel="stylesheet" href="<?php echo base_url('static'); ?>/css/style.css">
 
     <link rel="shortcut icon" href="<?php echo base_url('static'); ?>/img/favicon.ico">
 
@@ -24,34 +22,49 @@
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="<?php echo base_url('static'); ?>/js/vendor/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="<?php echo base_url('static'); ?>/js/flat-ui.min.js"></script>
-
-    <script src="<?php echo base_url('static'); ?>/js/application.js"></script>
+    <script src="<?php echo base_url('static'); ?>/mdl/material.min.js"></script>
 </head>
 <body>
-    <div id="header" class="container">
-        <nav class="navbar navbar-inverse navbar-lg" role="navigation">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-7">
-                    <span class="sr-only">Toggle navigation</span>
-                </button>
-                <a class="navbar-brand" href="#">作业提交</a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="navbar-collapse-7">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="<?php echo site_url(); ?>">首页</a></li>
-                    <?php if (isset($this->session->userdata['id'])) { ?>
-                        <li><a href="<?php echo site_url('logout'); ?>">注销</a></li>
-                    <?php } ?>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><?php echo isset($this->session->userdata['name']) ? $this->session->userdata['name'] : '游客'; ?></a></li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </nav>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+            mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <div class="mdl-layout-spacer">
+      <h4>DocPress</h4>
+      </div>
+      <?php if (isset($this->session->userdata['id'])) { ?>
+        <a href="/" class="mdl-navigation__link">
+          <?php if ($this->session->userdata['level'] == 'teacher') {
+            echo $this->session->userdata['id'];
+          } else if ($this->session->userdata['level'] == 'student') {
+            echo $this->session->userdata['name'];
+          } else {
+            echo 'admin';
+          } ?>
+        </a>
+      <?php } ?>
     </div>
-    <div id="container" class="container">
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title"></span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="/"><i class="material-icons">home</i>主页</a>
+      <?php if (isset($this->session->userdata['level']) && $this->session->userdata['level'] == 'teacher') { ?>
+        <a class="mdl-navigation__link" href="<?php echo site_url('new'); ?>"><i class="material-icons">turned_in_not</i>发布</a>
+      <?php }?>
+      <?php if (isset($this->session->userdata['level']) && $this->session->userdata['level'] == 'admin') { ?>
+        <a class="mdl-navigation__link" href="<?php echo site_url('add_list'); ?>"><i class="material-icons">turned_in_not</i>添加教师名单</a>
+        <a class="mdl-navigation__link" href="<?php echo site_url('edit_list'); ?>"><i class="material-icons">mode_edit</i>修改教师名单</a>
+      <?php }?>
+      <?php if (isset($this->session->userdata['id'])) { ?>
+      <a class="mdl-navigation__link" href="<?php echo site_url('logout'); ?>"><i class="material-icons">power_settings_new</i>注销</a></li>
+      <?php } else { ?>
+       <a class="mdl-navigation__link" href="<?php echo site_url('login');?>"><i class="material-icons">account_circle</i>登录</a>
+       <a class="mdl-navigation__link" href="<?php echo site_url('visitor');?>"><i class="material-icons">near_me</i>游客</a>
+      <?php }?>
+
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <div class="pagea-content">
+        
