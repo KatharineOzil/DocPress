@@ -3,3 +3,4 @@
 *.doc
 *.pdf
 upload/*
+*.sql
