@@ -26,12 +26,6 @@
   	  <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
   	  	登录
   	  </button>
-  	  <a class="mdl-button mdl-js-button" href="<?php echo site_url('register'); ?>">
-  	    注册
-  	  </a>
-  	  <a class="mdl-button mdl-js-button" href="<?php echo site_url('reset'); ?>">
-  	    找回密码
-  	  </a>
      </div>
 	</form>
   </div>

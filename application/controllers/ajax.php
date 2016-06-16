@@ -14,6 +14,22 @@ class Ajax extends CI_Controller {
 		redirect();
 	}
 
+	public function change_password()
+	{	
+		$old_password = $this->input->post('old_password');
+		$password = $this->input->post('new_password');
+		$con_password = $this->input->post('confirm');
+		if($password != $con_password){
+			echo "两次输入的密码不同，请检查后重新输入";
+		} else {
+			if($this->user->change_password($this->session->userdata['level'], $this->session->userdata['id'], $old_password, $password)){
+				echo "密码修改成功，请重新登录";
+			} else {
+				echo "旧密码输入错误，请检查后重新输入";
+			}	
+		}
+	}
+
 	public function reset_password()
 	{
 		$password1 = $this->input->post('password');
@@ -35,12 +51,16 @@ class Ajax extends CI_Controller {
 	public function reset()
 	{
 		$sid = $this->input->post('sid');
+		if (!$sid) {
+			echo('请输入信息');
+			die();
+		}
 		if (preg_match('/^\d{10}$/', $sid)){
 			$ret = $this->user->check_student($sid);
 		} else {
 			$ret = $this->user->check_teacher($sid);
 		}
-		if (!$ret) {
+		if ($ret) {
 			echo('用户不存在！');
 			die();
 		}
@@ -57,16 +77,11 @@ class Ajax extends CI_Controller {
 				'作业提交系统重置密码',
 				$mail_body
 		);
-			echo('找回密码相关邮件发送成功，请登录 $sid@stu.cqupt.edu.cn 查看');
+			echo('找回密码相关邮件发送成功，请登录 stu.cqupt.edu.cn 查看');
 		}
 		else{
-			$this->db->select('id');
-			$this->db->from('teacher_user');
-			$this->db->where('name',$sid);
-			$tid = $this->db->get()->result();
-			$tid = $tid[0]->id;
 			$this->mailer->sendmail(
-				"$tid@cqupt.edu.cn",
+				"$sid@cqupt.edu.cn",
 				"$sid",
 				'作业提交系统重置密码',
 				$mail_body

@@ -10,7 +10,7 @@ if [ -f outtree ]
 then
 	rm -f outtree
 fi
-neighbor <<eof
+/usr/local/bin/phylip/neighbor <<eof
 y
 y
 eof
@@ -22,8 +22,8 @@ then
 	rm -f plotfile
 fi
 
-drawgram <<eof
-../fontfile
+/usr/local/bin/phylip/drawgram <<eof
+/home/www/html/hupload/stu_task/fontfile
 y
 eof
 

@@ -12,6 +12,14 @@ class Homework_model extends CI_Model {
 		//$homework_type = $this->input->post('type');
 		$hid_list = explode('/' , $hwid);
 		$responses = array();
+		
+		$this->db->from('homework');
+		$this->db->where('title',$title);
+		$query = $this->db->get()->result();
+		if($query[0]->creator_id == $this->session->userdata['id'])
+		{
+			die('<meta charset="utf-8"><script>alert("您已布置过相同名称的作业，请检查作业名后重新布置");history.back(-1);</script>');
+		}
 
 		// fetch student lists from jwzx and check
 		foreach ($hid_list as $hid) {
@@ -51,11 +59,27 @@ class Homework_model extends CI_Model {
 		}
 
 		// create homework row
+		if (!empty($_FILES["the_file"]["tmp_name"]))
+		{
+			$original_name = $_FILES["the_file"]["name"];
+			$extension = "." . pathinfo($original_name, PATHINFO_EXTENSION);
+			if (!in_array($extension, array(".doc", ".docx", ".pdf", ".zip"))) {
+				die('<script>alert("不是符合的文件类型（.doc、.docx、.pdf、.zip）");history.go(-1);</script>');
+			}
+			$rand_num = rand(100000, 999999);
+			$file_name = "$title-$rand_num$extension";
+			move_uploaded_file($_FILES["the_file"]["tmp_name"], "attachment/" .$file_name);
+		} else {
+			$file_name = NULL;
+		}
+
 		$data = array(
 			'title' => $title,
 			'content' => $content,
 			'creator_id' => $creator_id,
-			);
+			'attachment' => $file_name
+		);
+
 		$this->db->insert('homework', $data);
 		$insert_id = $this->db->insert_id();
 		foreach($hid_list as $hid) {
@@ -65,6 +89,7 @@ class Homework_model extends CI_Model {
 			);
 			$this->db->insert('homework_hid', $data);
 		} 
+		return $insert_id;
 	}
 
 	function getHomeworks($user_id = 0, $level='student')
@@ -84,14 +109,13 @@ class Homework_model extends CI_Model {
 				return array();
 			}
 		}
-		$this->db->select('homework.id as id, homework.title as title, homework.content as content, group_concat(homework_hid.hid) as hid, teacher_user.name as name');
+		$this->db->select('homework.id as id, homework.title as title, homework.attachment as attachment, homework.content as content, group_concat(homework_hid.hid) as hid, teacher_user.name as name');
 		$this->db->from('homework');
 		$this->db->order_by('homework.id desc');
 		$this->db->join('teacher_user', 'teacher_user.id = homework.creator_id');
 		$this->db->join('homework_hid', 'homework_hid.homework_id = homework.id');
 		$this->db->group_by('homework.id');
 		if ($level === 'student') {
-			//TODO: bug
 			foreach ($hid as $h) {
 				$this->db->or_where('homework_hid.hid', $h);
 			}
@@ -99,7 +123,6 @@ class Homework_model extends CI_Model {
 			$this->db->where('homework.creator_id', $user_id);
 		}
 		$works = $this->db->get()->result();
-		//echo $this->db->last_query();die();
 		foreach ($works as $key => $work) {
 			$work->done = false;
 			if ($level === 'student') {
@@ -110,7 +133,6 @@ class Homework_model extends CI_Model {
 				if (count($query)) {
 					$query = $query[0];
 					$work->done = true;
-//					$work->submit_time = $query->time;
 					$work->feedback_file = $query->feedback_file;
 				}
 			}
@@ -125,8 +147,6 @@ class Homework_model extends CI_Model {
 			$query = $this->db->get()->result();
 			$work->total_count = count($query);
 		}
-		//var_dump($works);
-		//die();
 		return $works;
 	}
 
@@ -143,27 +163,25 @@ class Homework_model extends CI_Model {
 			$this->db->where('homework_id', $id);
 			$submissions = $this->db->get()->result();
 			$submissions_users = array();
-
 			$this->load->model('User_model', 'user', TRUE);
 			foreach ($submissions as $key => $value) {
-				$value->user = $this->user->getStuUser($value->user_id);
-				if (!isset($value->user)) {
-					return array();
+				$user = $this->user->getStuUser($value->user_id);
+				if (!$user) {
+					continue;
 				}
+				$value->user = $user;
 				array_push($submissions_users, $value->user->id);
 			}
 			$work->submissions = $submissions;
-
 			$hid_list = explode(',', $work->hid);
 			$this->db->select('id, sid, name');
 			$this->db->from('stu_list');
 			$this->db->where_in('hid', $hid_list);
-	
+
 			if ($submissions_users) {
-				$this->db->where_not_in('id', $submissions_users);
+				$this->db->where_not_in('sid', $submissions_users);
 			}
 			$work->not_submissions = $this->db->get()->result();
-
 			return $work;
 		}
 		return false;
@@ -209,6 +227,8 @@ class Homework_model extends CI_Model {
 		$this->db->where('homework_id', $id);
 		$this->db->delete('homework_submission');
 
+		$this->db->where('homework_id',$id);
+		$this->db->delete('homework_hid');
 	}
 
 	function get_homework_submitted_detail($id) {
@@ -226,11 +246,16 @@ class Homework_model extends CI_Model {
 	function submit($homework_id, $user_id, $file_name)
 	{
 		//$file_name = iconv("GBK", "UTF-8", $file_name);
+		$this->db->from('homework');
+		$this->db->where('id', $homework_id);
+		$homework = $this->db->get()->result();
+		if (!count($homework)) {
+		    die('作业不存在');
+		}
 		$data = array(
 				'homework_id' => $homework_id,
 				'user_id' => $user_id,
 				'file_name' => $file_name,
-//				'time' => date('Y-m-d H:i:s')
 			     );
 		$this->db->from('homework_submission');
 		$this->db->where('homework_id', $homework_id);
@@ -238,11 +263,13 @@ class Homework_model extends CI_Model {
 		$query = $this->db->get()->result();
 		if (count($query)) {
 			$query = $query[0];
+			@unlink('upload/' . $homework[0]->title . $homework[0]->creator_id . '/' . $query->file_name);
 			$this->db->where('id', $query->id);
 			$this->db->update('homework_submission', $data);
 		} else {
 			$this->db->insert('homework_submission', $data);
 		}
+		move_uploaded_file($_FILES["the_file"]["tmp_name"], "upload/" . $homework[0]->title . $homework[0]->creator_id .  '/' . $file_name);
 	}
 
 	function reply($id, $file_name)
@@ -257,33 +284,26 @@ class Homework_model extends CI_Model {
 
 	function check_homework($homework_title)
 	{
-		//$file = 'upload/'.$homework_title.'.txt';
 		$homework_title = escapeshellarg($homework_title);
-		$handle = popen("/usr/bin/python compare.py '$homework_title' 2>&1 ", "r");
+		$file = $homework_title . $this->session->userdata['id'];
+		$handle = popen("/usr/bin/python compare.py '$file' 2>&1 ", "r");
 		$data = '';
 		while ($temp = fread($handle, 1024)) {
 			$data .= $temp;
 		}
 		pclose($handle);
-		//$data = file_get_contents($file);	
 		return $data;
 	}
 
 	function homework_tree($homework_title)
 	{
-		$file = 'upload/'.$homework_title.'/infile';
+		$homework_title = urldecode($homework_title);
+		$file = 'upload/'.$homework_title.$this->session->userdata['id'].'/infile';
 		$homework_title = escapeshellarg($homework_title);
-		$stuNum = exec("head -n 1 upload/$homework_title/$homework_title.txt");
-		$handle = popen("./dist2matrix.pl 'upload/$homework_title/$homework_title.txt' '$stuNum' 2>&1 >$file", "r");
-		//$data = '';
-		//while ($temp = fread($handle, 1024)) {
-		//	$data .= $temp;
-		//}
-		pclose($handle);
-		//$data = 'done';
-		$tree = exec("./plagiarism_check.sh $homework_title");
-		//$data = file_get_contents($outtree);
-		//return $data;
+		$file_all=$homework_title.$this->session->userdata['id'];
+		$stuNum = exec("head -n 1 'upload/$file_all/$file_all.txt'");
+		exec("./dist2matrix.pl 'upload/$file_all/$file_all.txt' '$stuNum' 2>&1 >$file");
+		exec("./plagiarism_check.sh '$file_all'");
 	}
 
 }

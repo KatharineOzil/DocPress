@@ -4,13 +4,13 @@
     <h2 class="mdl-card__title-text login-title">找回密码</h2>
   </div>
   <div class="mdl-card__supporting-text">
-  修改密码链接将发至校内邮箱，学生请输入学号，教师请输入姓名
+  修改密码链接将发至校内邮箱，学生请输入学号，教师请输入学校邮箱开头，如：shukx
   </div>
   <div class="mdl-card__supporting-text">
     <form action="#" class="login-form">
       <div class="mdl-textfield mdl-js-textfield">
         <input class="mdl-textfield__input" type="text" id="sid" name="sid">
-        <label class="mdl-textfield__label" for="sid">学号或姓名</label>
+        <label class="mdl-textfield__label" for="sid">学号或姓名拼音</label>
       </div>
       <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
         找回

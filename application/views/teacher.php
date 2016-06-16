@@ -23,7 +23,12 @@ foreach ($works as $key => $work) {
     <h2 class="mdl-card__title-text"><?php echo $work->title . "($work->hid)"; ?></h2>
   </div>
   <div class="mdl-card__supporting-text">
-  	<?php echo $work->content; ?>
+  	<?php
+		echo $work->content;
+		if ($work->attachment) {
+		    echo '<br><br><small>附件下载：<a href="'. base_url('attachment/' . $work->attachment) . '">查看附件</a></smaill>';
+		}
+	 ?>
   </div>
   <div class="mdl-card__actions mdl-card--border">
     <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="<?php echo site_url('homework_detail/' . $work->id); ?>">

@@ -29,7 +29,12 @@ foreach ($works as $key => $work) {
     ?></h2>
   </div>
   <div class="mdl-card__supporting-text">
-    <?php echo $work->content; ?>
+    <?php
+	echo $work->content;
+	if ($work->attachment) {
+		echo '<br><br><small>附件下载：<a href="'. base_url('attachment/' . $work->attachment) . '">查看附件</a></smaill>';
+	}
+    ?>
   </div>
   <div class="mdl-card__actions mdl-card--border">
     <div class="hide">

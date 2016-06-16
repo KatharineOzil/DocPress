@@ -43,16 +43,14 @@
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
       <div class="mdl-layout-spacer">
-      <h4>DocPress</h4>
+      <h4>DocPress 作业提交系统</h4>
       </div>
       <?php if (isset($this->session->userdata['id'])) { ?>
-        <a href="/" class="mdl-navigation__link">
-          <?php if ($this->session->userdata['level'] == 'teacher') {
-            echo $this->session->userdata['id'];
-          } else if ($this->session->userdata['level'] == 'student') {
-            echo $this->session->userdata['name'];
-          } else {
+        <a href="<?php echo site_url('/');?>" class="mdl-navigation__link">
+          <?php if ($this->session->userdata['level'] == 'admin') {
             echo 'admin';
+          } else {
+            echo $this->session->userdata['name'];
           } ?>
         </a>
       <?php } ?>
@@ -61,7 +59,7 @@
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title"></span>
     <nav class="mdl-navigation">
-      <a class="mdl-navigation__link" href="/"><i class="material-icons">home</i>主页</a>
+      <a class="mdl-navigation__link" href="<?php echo site_url('/');?>"><i class="material-icons">home</i>主页</a>
       <?php if (isset($this->session->userdata['level']) && $this->session->userdata['level'] == 'teacher') { ?>
         <a class="mdl-navigation__link" href="<?php echo site_url('new'); ?>"><i class="material-icons">turned_in_not</i>发布</a>
       <?php }?>
@@ -70,13 +68,20 @@
         <a class="mdl-navigation__link" href="<?php echo site_url('edit_list'); ?>"><i class="material-icons">mode_edit</i>修改教师名单</a>
       <?php }?>
       <?php if (isset($this->session->userdata['id'])) { ?>
+        <?php if (isset($this->session->userdata['level']) && $this->session->userdata['level'] != 'admin') { ?>
+          <a class="mdl-navigation__link" href="<?php echo site_url('change_password'); ?>"><i class="material-icons">mode_edit</i>修改密码</a></li>
+        <?php }?>
       <a class="mdl-navigation__link" href="<?php echo site_url('logout'); ?>"><i class="material-icons">power_settings_new</i>注销</a></li>
       <?php } else { ?>
        <a class="mdl-navigation__link" href="<?php echo site_url('login');?>"><i class="material-icons">account_circle</i>登录</a>
-       <a class="mdl-navigation__link" href="<?php echo site_url('visitor');?>"><i class="material-icons">near_me</i>游客</a>
+       <a class="mdl-navigation__link" href="<?php echo site_url('register');?>"><i class="material-icons">perm_identity</i>注册</a>
+       <a class="mdl-navigation__link" href="<?php echo site_url('reset');?>"><i class="material-icons">reply</i>找回密码</a> 
       <?php }?>
-
-    </nav>
+<!--	<div class="mdl-layout-spacer"></div>
+	<p class="mdl-nav"><br>All content copyright 
+	<br/>Katharine && Ricter 
+	<br/>© 2016 • All rights reserved.</p>
+-->    </nav>
   </div>
   <main class="mdl-layout__content">
     <div class="pagea-content">

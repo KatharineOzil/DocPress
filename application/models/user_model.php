@@ -2,9 +2,46 @@
 
 class User_model extends CI_Model {
 
-	function __construct()
+    function __construct()
     {
         parent::__construct();
+    }
+
+    function change_password($level, $sid, $old_password, $new_password)
+    {
+	if($level == 'student')
+	{
+	    $this->db->from('stu_user');
+	    $this->db->where('id',$sid);
+	    $query = $this->db->get()->result();
+	    if($query[0]->password != sha1($old_password))
+	    {
+	         return false;
+	    } else {
+		$this->db->from('stu_user');
+		$this->db->where('id',$sid);
+	        $this->db->update('stu_user',array('password'=>sha1($new_password))); 
+	        //echo  $this->db->last_query();
+		//die();
+		return true;
+	    }
+	}
+	
+	if($level == 'teacher')
+	{
+	    $this->db->from('teacher_user');
+	    $this->db->where('id',$sid);
+	    $query = $this->db->get()->result();
+	    if($query[0]->password != sha1($old_password))
+	    {
+		return false;
+	    } else {
+	        $this->db->from('teacher_user');
+	        $this->db->where('id',$sid);
+		$this->db->update('teacher_user',array('password'=>sha1($new_password)));
+		return true;
+	    }
+	}
     }
 
     function check_student($sid)
@@ -26,10 +63,10 @@ class User_model extends CI_Model {
 	        $this->db->where('id', $sid);
 	        $this->db->update('stu_user', array('password'=>sha1($password)));
         } else {
-            $this->db->from('teacher_user');
-            $this->db->where('sid', $sid);
+	    $this->db->from('teacher_user');
+            $this->db->where('id', $sid);
             $this->db->update('teacher_user', array('password'=>sha1($password)));
-        };
+	};
     }
 
     function check_teacher($name)
@@ -42,19 +79,6 @@ class User_model extends CI_Model {
         if (count($user) == 0)
             return false;
         return true;
-        
-	    //$user_list = array('白明泽', '袁帅', '舒坤贤', '孙全', '武巍峰', '谭军', '谢永芳', '汪大勇', '何晓红', '江怀仲', '常平安', '解增言', '梁亦龙', '曾垂省', '刘毅');
-        /*if (empty($name))
-            return false;
-	    if (!in_array($name, $user_list)) {
-		    return false;
-	    }
-        $this->db->from('teacher_user');
-        $this->db->where('name', $name);
-        $user = $this->db->get()->result();
-        if (count($user) > 0)
-            return false;
-        return true;*/
     }
 
     function create_student($sid, $password, $class, $name)
@@ -120,7 +144,8 @@ class User_model extends CI_Model {
         $this->db->from('teacher_user');
         $this->db->where('name', $name);
         $this->db->where('password', sha1($password));
-        $user = $this->db->get()->result();
+	$user = $this->db->get()->result();
+        //echo $this->db->last_query();
         if (count($user) <= 0)
             return false;
         return $user[0];
@@ -152,7 +177,7 @@ class User_model extends CI_Model {
     {
         if (empty($name))
             return;
-
+	$name = urldecode($name);
         $this->db->where('name', $name);
         $this->db->delete('teacher_user');
     }

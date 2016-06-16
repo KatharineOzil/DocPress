@@ -80,3 +80,20 @@
 .submit-label {
   float: right;
 }
+
+.image-load-none {
+  display: none;
+}
+
+.image-load-display {
+  top: 7px;
+}
+
+.image-link {
+  margin: 6px 0;
+}
+
+.mdl-card__supporting-text {
+  font-size: 1.1rem;
+}
+

@@ -45,7 +45,7 @@
 	</form>
   </div>
   <div class="mdl-card__actions mdl-card--border">
-  <span class="mdl-card__supporting-text">请点击右方 Menu 选择登录方式</span>
+  <span class="mdl-card__supporting-text">请点击右方 Menu 选择注册方式</span>
   </div>
   <div class="mdl-card__menu">
     <button id="demo-menu-lower-right"

@@ -35,22 +35,24 @@
 				echo '<td class="mdl-data-table__cell--non-numeric">' . $value->user->id . '</td>';
 				echo '<td class="mdl-data-table__cell--non-numeric">' . $value->user->name . '</td>';
 				echo '<td class="mdl-data-table__cell--non-numeric">' . $hid . '</td>';
-				echo '<td class="mdl-data-table__cell--non-numeric"><a class="mdl-navigation__link" href="' . base_url('upload/' . $work->title . '/' . $value->file_name) . '">点击下载</a></td>';
+				echo '<td class="mdl-data-table__cell--non-numeric"><a class="mdl-navigation__link" href="' . base_url('upload/' . $work->title . $work->creator_id . '/' . $value->file_name) . '">点击下载</a></td>';
 				echo '<td class="mdl-data-table__cell--non-numeric"><a href="##" class="submit-label-feedback mdl-navigation__link" data-id="' . $value->id . '">上传反馈</a></td>';
 				echo '<td class="mdl-data-table__cell--non-numeric">';
 
-				if($value->feedback_file)
-					echo '已反馈';
-				else
+				if($value->feedback_file) {
+					echo '<i class="material-icons">done</i>';
+				} else {
 					echo '未反馈';
+				}
 				echo '</td>';
-			} ?>
+			?>
 			<div class="hide">
 				<form class="homework-submit" action="<?php echo site_url('welcome/submit_feedback/' . $value->id); ?>" method="post" enctype="multipart/form-data">
 					<input type="file" name="the_file" id="homework-submit-image-<?php echo $value->id; ?>" onChange="homeworkSubmit(<?php echo $value->id; ?>)">
 					<input type="submit" id="homework-submit-button-<?php echo $value->id; ?>">
 				</form>
-			</div><?php }?>
+			</div>
+			<?php }}?>
 
 		</tbody>
 	</table>

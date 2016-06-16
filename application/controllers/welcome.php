@@ -37,6 +37,11 @@ class Welcome extends CI_Controller {
 		$this->load->view('reset');
 	}
 
+	public function change_password()
+	{
+		$this->load->view('change_password');
+	}
+
 	public function add_list()
 	{
 		if ($this->session->userdata['level'] != 'admin') {
@@ -90,6 +95,12 @@ class Welcome extends CI_Controller {
 		redirect();
 	}
 
+	public function ajax_check_homework($id) {
+		$work = $this->homework->get_homework_detail($id);
+		$result = $this->homework->check_homework($work->title);
+		echo $result;
+	}
+
 	public function check_homework($id)
 	{
 		if ($this->session->userdata['level'] != 'teacher') {
@@ -97,8 +108,12 @@ class Welcome extends CI_Controller {
 		}
 		$work = $this->homework->get_homework_detail($id);
 		$data['work'] = $work;
-		$data['result'] = $this->homework->check_homework($work->title);
 		$this->load->view('check_homework', $data);
+	}
+
+	public function ajax_homework_tree($title) {
+		$this->homework->homework_tree($title);
+		echo '转换成功';
 	}
 
 	public function homework_tree($id)
@@ -108,7 +123,7 @@ class Welcome extends CI_Controller {
 		}
 		$work = $this->homework->get_homework_detail($id);
 		$data['work'] = $work;
-		$data['result'] = $this->homework->homework_tree($work->title);
+		// $data['result'] = $this->homework->homework_tree($work->title);
 		$this->load->view('homework_tree', $data);
 	}
 	
@@ -124,14 +139,7 @@ class Welcome extends CI_Controller {
 		$hid = $this->input->post('hid');
 
 		if (!empty($title)) {
-//			$original_name = $_FILES["the_file"]["name"];
-//			$extension = "." . pathinfo($original_name, PATHINFO_EXTENSION);
-//			if (!in_array($extension, array(".doc", ".docx", ".pdf", ".zip"))) {
-//				die('<script>alert("不是符合的文件类型（.doc、.docx、.pdf、.zip）");history.go(-1);</script>');
-//			}
-//			$file_name = $title . "_" . rand(100000, 999999) . $extension;
-//			move_uploaded_file($_FILES["the_file"]["tmp_name"], "attachment/" .$file_name);
-			$this->homework->create($title, $hid, $content, $this->session->userdata['id']);
+			$id = $this->homework->create($title, $hid, $content, $this->session->userdata['id']);
 			redirect();
 		} else {
 			$this->load->view('new');
@@ -164,10 +172,11 @@ class Welcome extends CI_Controller {
 			redirect();
 		}
 		$hwid = $homework->hid;
-		$hid_list = explode(',' , $hwid);		
+		$hid_list = explode(',' , $hwid);
 		foreach ($hid_list as $hid) {
 			$this->db->from('stu_list');
 			$this->db->where('hid',$hid);
+			$this->db->where('sid', $this->session->userdata['id']);
 			$result = $this->db->get()->result();
 			if(count($result)){
 				$stu_hid = $hid;
@@ -175,10 +184,9 @@ class Welcome extends CI_Controller {
 		}
 		$file_name = $stu_hid . "_" . $user->id . "_" . $user->name . $extension;
 
-		if (!is_dir('upload/' . $homework->title)){
-			mkdir('upload/' . $homework->title);
+		if (!is_dir('upload/' . $homework->title . $homework->creator_id)){
+			mkdir('upload/' . $homework->title . $homework->creator_id);
 		}
-		move_uploaded_file($_FILES["the_file"]["tmp_name"], "upload/" . $homework->title .  '/' . $file_name);
 		$this->homework->submit($id, $this->session->userdata['id'], $file_name);
 		redirect();
 	}
@@ -188,18 +196,20 @@ class Welcome extends CI_Controller {
 		if (!isset($this->session->userdata['level']) || $this->session->userdata['level'] != 'teacher') {
 			redirect('login');
 		}
-
 		$data['work'] = $this->homework->getHomework($id);
 		$this->load->view('detail', $data);
 	}
 
 	public function download($id)
 	{
+		if (!isset($this->session->userdata['level']) || $this->session->userdata['level'] != 'teacher') {
+			redirect();
+		}
 		$this->load->library('zip');
 		$work = $this->homework->getHomework($id);
 		$homework = $this->homework->get_homework_detail($id);
 		foreach ($work->submissions as $key => $value) {
-			$this->zip->read_file('upload/' . $homework->title . '/' . $value->file_name);
+			$this->zip->read_file('upload/' . $homework->title . $homework->creator_id . '/' . $value->file_name );
 		}
 		$this->zip->download($homework->title . '作业打包.zip');
 	}
@@ -221,8 +231,8 @@ class Welcome extends CI_Controller {
 		$work = $this->homework->get_homework_submitted_detail($id);
 		$original_name = $_FILES["the_file"]["name"];
 		$extension = "." . pathinfo($original_name, PATHINFO_EXTENSION);
-		if (!in_array($extension, array(".doc", ".docx", ".pdf", ".zip"))) {
-			die('<meta charset="utf-8"><script>alert("不是符合的文件类型（.doc、.docx、.pdf、.zip）");history.go(-1);</script>');
+		if (!in_array($extension, array(".doc", ".docx", ".pdf"))) {
+			die('<meta charset="utf-8"><script>alert("不是符合的文件类型（.doc、.docx、.pdf）");history.go(-1);</script>');
 		}
 		$homework = $this->homework->get_homework_detail($work->homework_id);
 		if (!$homework) {

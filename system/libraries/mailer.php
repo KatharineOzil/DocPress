@@ -17,11 +17,11 @@ class Mailer {
         $this->mail->SMTPDebug  = 0;                
         $this->mail->SMTPAuth   = true;           
         $this->mail->SMTPSecure   = "ssl";           
-        $this->mail->Host       = "stu.cqupt.edu.cn";      
-        $this->mail->Port       = 465;                   
-        $this->mail->Username       = '2013212075@stu.cqupt.edu.cn'; 
-        $this->mail->Password       = 'uuu-4BF-ZwY-tfA';                   
-        $this->mail->SetFrom('2013212075@stu.cqupt.edu.cn', 'ibi');
+        $this->mail->Host       = "mail.cqupt.edu.cn";
+        $this->mail->Port       = 465;
+        $this->mail->Username       = 'xiezy@cqupt.edu.cn';
+        $this->mail->Password       = 'hupload2016';
+        $this->mail->SetFrom('xiezy@cqupt.edu.cn', 'ibi');    
     }
  
     public function sendmail($to, $to_name, $subject, $body){

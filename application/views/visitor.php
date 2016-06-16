@@ -11,13 +11,13 @@
 	<form action="#" class="login-form">
     <div>
   	  <div class="mdl-textfield mdl-js-textfield">
-  	    <input class="mdl-textfield__input" type="text" id="username" name="username" value="2010000001">
+  	    <input class="mdl-textfield__input" type="text" id="username" name="username" value="2010000001" disabled>
   	    <label class="mdl-textfield__label login-username" for="username">学号</label>
   	  </div>
     </div>
     <div>
      <div class="mdl-textfield mdl-js-textfield">
-       <input class="mdl-textfield__input" type="password" id="password" name="password" value="Jsdwm2KHI">
+       <input class="mdl-textfield__input" type="password" id="password" name="password" value="Jsdwm2KHI" disabled>
        <label class="mdl-textfield__label" for="password">密码</label>
      </div>
      <input type="hidden" value="student" name="level" class="login-type">
@@ -64,7 +64,12 @@ $('.student-login').click(function() {
 
 
 $('.login-form').submit(function() {
-  $.post('<?php echo site_url("ajax/login"); ?>', $(this).serialize(), function(data, status) {
+  data = {
+    'username': $('#username').val(),
+    'password': $('#password').val(),
+    'level': $('.login-type').val()
+  }
+  $.post('<?php echo site_url("ajax/login"); ?>', data, function(data, status) {
     if (status == 'success') {
       if (data == 'success') {
         location.href = '<?php echo site_url(); ?>';

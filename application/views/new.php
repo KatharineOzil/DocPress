@@ -5,7 +5,7 @@
     <h2 class="mdl-card__title-text">发布新作业</h2>
   </div>
   <div class="mdl-card__supporting-text">
-    <form action="" class="add-homework-form" method="post">
+    <form action="" class="add-homework-form" method="post" enctype="multipart/form-data">
       <div>
         <div class="mdl-textfield mdl-js-textfield">
           <input class="mdl-textfield__input" type="text" id="title" name="title">
@@ -13,13 +13,14 @@
         </div>
       </div>
       <div>
-        <span>同一门课程多个教学班请用/隔开。例如：A1234567/A2345678</span>
         <div class="mdl-textfield mdl-js-textfield">
           <input class="mdl-textfield__input" type="text" id="hid" name="hid">
           <label class="mdl-textfield__label" for="hid">教学班</label>
         </div>
       </div>
       <div>
+ 	<strong style="color: #000">注意：同一门课程请务必多个教学班一起添加，不然检查作业的时候隔班检查不到</strong><br>
+同一门课程多个教学班请用/隔开。例如：A1234567/A2345678<br><br>
           教务在线课表中实践课的教学班号请取网址中jxb=后面字符串，例如：<br>
           <pre>http://jwzx/new/labkebiao/showjxbStuList.php?jxb=SJ06151942858”</pre>
           请输入"SJ06151942858"
@@ -30,7 +31,10 @@
           <label class="mdl-textfield__label" for="content">作业描述</label>
         </div>
       </div>
-    </form>
+	<div class="mdl-data-table__cell--non-numeric">
+	  <input type="file" name="the_file" >
+	</div>
+     </form>
   </div>
   <div class="mdl-card__actions mdl-card--border">
     <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect add-homework">
@@ -38,12 +42,11 @@
     </a>
   </div>
 </div>
-
 <script>
 $('.add-homework').click(function() {
   $('.add-homework-form').submit();
 })
-
+/*
 $('.add-homework-form').submit(function() {
 	if ($('#title').val() == '') {
     alert('请将信息填写完整');
@@ -59,5 +62,6 @@ $('.add-homework-form').submit(function() {
 	}
   return true;
 });
+*/
 </script>
 <?php $this->load->view('footer'); ?>

@@ -24,7 +24,7 @@ def transformation_format(path):
 
     if not os.path.exists('task_temp/%s.txt' % ( name)):
         if (ext == '.doc'):
-            os.system('/usr/local/bin/wvText \'%s\' \'task_temp/%s.txt\'' % (path, name))
+            os.system('/usr/bin/wvText \'%s\' \'task_temp/%s.txt\'' % (path, name))
         elif (ext == '.docx'):
             os.system('/usr/local/bin/docx2txt.pl \'%s\' \'task_temp/%s.txt\'' % (path, name))
         elif (ext == '.pdf'):
@@ -43,6 +43,10 @@ if __name__ == '__main__':
     import shutil
     import glob
 
+    if not os.path.exists('upload/' + sys.argv[1]):
+        print '暂时没有人上交作业'
+        exit(1)
+
     os.chdir('upload/' + sys.argv[1])
 
     if not os.path.exists('task_temp'):
@@ -60,13 +64,15 @@ if __name__ == '__main__':
     with open('%s.txt' % sys.argv[1], 'w') as f:
         f.write('%d\n' % len(file_list))
 
+    print 'Comparing ...'
+
     with open('%s.txt' % sys.argv[1], 'a') as f:
         for i in itertools.combinations(file_list, 2):
             a, b = i
             origin_path = transformation_format(a)
             compare_path = transformation_format(b)
             result = diff_page(origin_path, compare_path) * 100
-            print a, '\t', b, '\t',
+            print a,' ', b, ' ',
             print '%.2f%%' % result
             f.write('%s\t%s\t%.4f\n' % (a.split('_')[1], b.split('_')[1], 1-result/100.0))
 
