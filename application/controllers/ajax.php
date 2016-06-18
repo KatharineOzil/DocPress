@@ -207,7 +207,7 @@ class Ajax extends CI_Controller {
 			$user_list = explode(' ', $teacher_list);
 			foreach ($user_list as $value) {
 				$passwd = md5(md5(rand()) . rand());
-				$id = md5(rand());
+				$id = rand();
 				$list = array(
 						'name' => $value,
 						'password' => $passwd,

@@ -177,9 +177,10 @@ class User_model extends CI_Model {
     {
         if (empty($name))
             return;
-	$name = urldecode($name);
+	    $name = urldecode($name);
         $this->db->where('name', $name);
         $this->db->delete('teacher_user');
+        //echo $this->db->last_query();
     }
 
     function edit_list()

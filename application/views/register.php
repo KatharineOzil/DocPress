@@ -63,7 +63,7 @@
 <script>
 $('.teacher-login').click(function() {
   $('.login-title').text('教师注册');
-  $('.login-username').text('邮箱前缀，如：shukx');
+  $('.login-username').text('教师编号');
   $('.login-class-div').hide();
   $('.login-type').val('teacher');
 })
