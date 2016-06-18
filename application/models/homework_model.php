@@ -23,7 +23,7 @@ class Homework_model extends CI_Model {
 
 		// fetch student lists from jwzx and check
 		foreach ($hid_list as $hid) {
-			if (!preg_match('/(SJ|A|SK)\d{5,12}/', $hid, $type)) {
+			if (!preg_match('/(SJ|A|SK|R)\d{5,12}/', $hid, $type)) {
 				die('<meta charset="utf-8"><script>alert("教学班号不正确");history.back(-1);</script>');
 			}
 			$sjk_url = "http://jwzx.cqupt.edu.cn/new/labkebiao/showjxbStuList.php?jxb=$hid";

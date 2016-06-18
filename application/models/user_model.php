@@ -38,7 +38,7 @@ class User_model extends CI_Model {
 	    } else {
 	        $this->db->from('teacher_user');
 	        $this->db->where('id',$sid);
-		$this->db->update('teacher_user',array('password'=>sha1($new_password)));
+            $this->db->update('teacher_user',array('password'=>sha1($new_password)));
 		return true;
 	    }
 	}
@@ -69,6 +69,18 @@ class User_model extends CI_Model {
 	};
     }
 
+    function check_teacher_id($name)
+    {
+        if (empty($name))
+            return false;
+        $this->db->from('teacher_user');
+        $this->db->where('prefix', $name);
+        $user = $this->db->get()->result();
+        if (count($user) == 0)
+            return false;
+        return true;
+    }
+
     function check_teacher($name)
     {
         if (empty($name))
@@ -89,17 +101,42 @@ class User_model extends CI_Model {
                 'id' => $sid,
                 'password' => sha1($password),
                 'class' => $class,
-//                'create_time' => date('Y-m-d H:i:s'),
                 'name' => $name
             );
         $this->db->insert('stu_user', $data);
-        //return $this->db->insert_id();
         return true;
     }
 
-    function create_teacher($sid, $name, $password)
+    function create_teacher($tid, $prefix, $name, $password)
     {
-        if (!isset($name) || !isset($password) || !isset($sid))
+        $url = 'http://jwzx.cqupt.edu.cn/new/labkebiao/showteakebiao2.php?tid=' . $tid;
+        $str = file_get_contents($url);
+        $str = str_replace(array("\r\n"), "", $str);
+        $str = iconv("GBK", "UTF-8", $str);
+        preg_match_all("/(<td >&nbsp;|<\/font><br>)(.*?)<br>.*?<br>.*?<br><font color=#ff0000>.*?<\/font>\s+<BR>.*?<br>.*?<br><a href='showStuList\.php\?jxb=((SK|A|SJ|R)\d{5,12})/", $str, $data);
+
+        if (!$data) {
+            $result = array();
+        } else {
+            foreach($data[2] as $_ => $value) {
+                $value = str_replace(array("<td >", "&nbsp;", "</td>", "<tr>", "</tr>", "<td class='title'>"), "", $value);
+                $value = preg_replace("/^.*?节/", "", $value);
+                $data[2][$_] = $value;
+            }
+            $result = array_map(null, $data[3], $data[2]);
+            $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
+        }
+        foreach($result as $_ => $value) {
+            $data = array(
+                'hid' => $value[0],
+                'tid' => $tid,
+                'title' => $value[1]
+            );
+
+            $this->db->insert('tid_hid', $data);
+        }
+
+        if (!isset($name) || !isset($password) || !isset($tid))
             return false;
         $this->db->from('teacher_user');
         $this->db->where('name', $name);
@@ -108,15 +145,17 @@ class User_model extends CI_Model {
         if (($user[0]['status']) == 'done')
             return false;
         $data = array(
-                'password' => sha1($password),
-//                'create_time' => date('Y-m-d H:i:s'),
-                'id' => $sid,
-                'status' => 'done'
-            );
+            'password' => sha1($password),
+            'id' => $tid,
+            'status' => 'done',
+            'prefix' => $prefix
+        );
         $this->db->from('teacher_user');
         $this->db->where('name', $name);
         //$user = $this->db->get()->result();
         $this->db->update('teacher_user', $data);
+
+
         return true;
     }
 

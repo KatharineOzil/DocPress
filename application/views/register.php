@@ -6,10 +6,10 @@
   </div>
   <div class="mdl-card__supporting-text login-card-form">
 	<form action="#" class="login-form">
-    <div class="login-class-div">
+    <div>
      <div class="mdl-textfield mdl-js-textfield">
        <input class="mdl-textfield__input" type="text" id="class" name="class">
-       <label class="mdl-textfield__label" for="class">班级</label>
+       <label class="mdl-textfield__label login-class" for="class">班级</label>
      </div>
     </div>
     <div>
@@ -64,14 +64,14 @@
 $('.teacher-login').click(function() {
   $('.login-title').text('教师注册');
   $('.login-username').text('教师编号');
-  $('.login-class-div').hide();
+  $('.login-class').text('邮箱前缀');
   $('.login-type').val('teacher');
 })
 
 $('.student-login').click(function() {
   $('.login-title').text('学生注册');
   $('.login-username').text('学号');
-  $('.login-class-div').show();
+  $('.login-class').text('班级');
   $('.login-type').val('student');
 })
 

@@ -58,7 +58,7 @@ class Ajax extends CI_Controller {
 		if (preg_match('/^\d{10}$/', $sid)){
 			$ret = $this->user->check_student($sid);
 		} else {
-			$ret = $this->user->check_teacher($sid);
+			$ret = $this->user->check_teacher_id($sid);
 		}
 		if ($ret) {
 			echo('用户不存在！');
@@ -104,7 +104,7 @@ class Ajax extends CI_Controller {
 		$name = $this->input->post('name');
 		$level = $this->input->post('level');
 		if ($level === 'student') {
-			if (strlen($sid) != 10 || strlen($class) != 7) {
+			if (strlen($sid) != 10 || strlen($class) >= 7) {
 				die("请输入正确的信息！");
 			}
 		}
@@ -125,11 +125,12 @@ class Ajax extends CI_Controller {
 			}
 		} else if ($level == 'teacher') {
 			if ($this->user->check_teacher($name)) {
-				$user_id = $this->user->create_teacher($sid, $name, $password);
+				$user_id = $this->user->create_teacher($sid, $class, $name, $password);
 				if ($user_id) {
 					$this->session->set_userdata('id', $sid);
 					$this->session->set_userdata('name', $name);
 					$this->session->set_userdata('level', $level);
+					$this->session->set_userdata('prefix', $class);
 					echo 'success';
 				} else {
 					echo '该用户已被注册';
