@@ -98,4 +98,14 @@
 }
 
 .h_class {
+  overflow: hidden;
+  height: 20px;
+  border-radius: 20px;
+  line-height: 20px;
+  font-weight: bolder;
+  color: #FFF;
+  background: rgba(0, 0, 0, 0.49);
+  padding: 3px 6px;
+  font-size: 0.1em;
+  margin: 2px 3px;
 }
