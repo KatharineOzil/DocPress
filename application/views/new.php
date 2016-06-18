@@ -14,22 +14,30 @@
       </div>
       <div>
         <div class="mdl-textfield mdl-js-textfield">
-          <input class="mdl-textfield__input" type="text" id="hid" name="hid">
-          <label class="mdl-textfield__label" for="hid">教学班</label>
-        </div>
-      </div>
-      <div>
- 	<strong style="color: #000">注意：同一门课程请务必多个教学班一起添加，不然检查作业的时候隔班检查不到</strong><br>
-同一门课程多个教学班请用/隔开。例如：A1234567/A2345678<br><br>
-          教务在线课表中实践课的教学班号请取网址中jxb=后面字符串，例如：<br>
-          <pre>http://jwzx/new/labkebiao/showjxbStuList.php?jxb=SJ06151942858”</pre>
-          请输入"SJ06151942858"
-      </div>
-      <div>
-        <div class="mdl-textfield mdl-js-textfield">
           <textarea class="mdl-textfield__input" type="text" rows= "3" id="content" name="content"></textarea>
           <label class="mdl-textfield__label" for="content">作业描述</label>
         </div>
+      </div>
+      <div>
+        <div class="mdl-textfield mdl-js-textfield">
+          <input class="mdl-textfield__input" type="text" id="hid" name="hid">
+          <label class="mdl-textfield__label" for="hid" id="hid-label">教学班</label>
+        </div>
+      </div>
+    <div>
+    已有教学班列表：
+    <?php
+    if (isset($hid)) {
+        foreach ($hid as $_ => $h) {
+            echo '<span class="mdl-button mdl-js-button mdl-js-ripple-effect h_class" id="' . $h->hid . '">' . $h->hid . '</span>';
+            echo '<div class="mdl-tooltip" for="' . $h->hid . '">' . $h->title . '</div>';
+        }
+    }?>
+    </div>
+    <br>
+      <div>
+ 	    <strong style="color: #000">注意：同一门课程请务必多个教学班一起添加，不然检查作业的时候隔班检查不到</strong><br>
+        如果教学班列表中没有所需教学班，请自行添加。同一门课程多个教学班请用/隔开。例如：A1234567/A2345678<br>
       </div>
 	<div class="mdl-data-table__cell--non-numeric">
 	  <input type="file" name="the_file" >
@@ -46,22 +54,22 @@
 $('.add-homework').click(function() {
   $('.add-homework-form').submit();
 })
-/*
-$('.add-homework-form').submit(function() {
-	if ($('#title').val() == '') {
-    alert('请将信息填写完整');
-		return false;
-	}
-	if ($('#hid').val() == '') {
-    alert('请将信息填写完整');
-		return false;
-	}
-	if ($('#content').val() == '') {
-    alert('请将信息填写完整');
-		return false;
-	}
-  return true;
-});
-*/
+$('#hid').bind('focus keypress keydown focusout', function() {
+  if ($(this).val() == "") {
+    $('#hid-label').text('教学班');
+  }
+})
+
+$('.h_class').click(function() {
+  var data = $('#hid').val();
+  if (data) {
+    data = data + '/' + $(this).text();
+  } else {
+    data = $(this).text();
+  }
+  $('#hid').val(data);
+  $('#hid').focus();
+  $('#hid-label').text('');
+})
 </script>
 <?php $this->load->view('footer'); ?>

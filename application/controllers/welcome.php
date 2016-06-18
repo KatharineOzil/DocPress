@@ -141,8 +141,9 @@ class Welcome extends CI_Controller {
 		if (!empty($title)) {
 			$id = $this->homework->create($title, $hid, $content, $this->session->userdata['id']);
 			redirect();
-		} else {
-			$this->load->view('new');
+        } else {
+            $data['hid'] = $this->homework->get_class($this->session->userdata['id']);
+			$this->load->view('new', $data);
 		}
 	}
 

@@ -306,6 +306,13 @@ class Homework_model extends CI_Model {
 		$stuNum = exec("head -n 1 'upload/$file_all/$file_all.txt'");
 		exec("./dist2matrix.pl 'upload/$file_all/$file_all.txt' '$stuNum' 2>&1 >$file");
 		exec("./plagiarism_check.sh '$file_all'");
-	}
+    }
+
+    function get_class($id) {
+        $this->db->from('tid_hid');
+        $this->db->select("hid, title");
+        $this->db->where('tid', $id);
+        return $this->db->get()->result();
+    }
 
 }
