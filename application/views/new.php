@@ -70,7 +70,7 @@ $('#hid').bind('focus keypress keydown focusout', function() {
 
 $('.h_class').click(function() {
   var data = $('#hid').val();
-  if (data != "无教学班") {
+  if (data == "无教学班") {
     return;
   }
   if (data) {
