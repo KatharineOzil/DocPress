@@ -48,7 +48,7 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-include_once('db.local.php')
+include_once 'db.local.php';
 
 
 /* End of file database.php */
