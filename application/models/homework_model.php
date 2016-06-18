@@ -287,6 +287,7 @@ class Homework_model extends CI_Model {
 	function check_homework($homework_id)
 	{
 		$value = $this->input->get('range');
+		$value = intval($value);
 		$homework_id = escapeshellarg($homework_id);
 		$file = $homework_id;
 		$handle = popen("/usr/bin/python compare.py '$file' '$value' 2>&1 ", "r");
