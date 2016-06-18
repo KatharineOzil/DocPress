@@ -41,16 +41,18 @@ function check_homework() {
     $('.check-load').removeClass('image-load-none');
     var url = "<?php echo site_url('welcome/ajax_check_homework/' . $work->id);?>";
     url += "?range=" + $("#range").val();
+    $('#result').text('请等待...');
     $.get(url,
           function(data, status) {
               $('#result').text(data);
               $('.check-load').hide();
+             $('.check-load').addClass('image-load-none');
           }
     )
 }
 
 function homework_tree() {
-        $('.image-load-display').removeClass('image-load-none');
+    $('.image-load-display').removeClass('image-load-none');
 	$.get("<?php echo site_url('welcome/ajax_homework_tree/' . $work->title);?>",
 	function (data, status) {
 		alert(data);

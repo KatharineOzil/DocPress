@@ -5,3 +5,4 @@
 upload/*
 *.sql
 application/config/db.local.php
+.sw[op]
