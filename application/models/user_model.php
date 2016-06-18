@@ -109,6 +109,25 @@ class User_model extends CI_Model {
 
     function create_teacher($tid, $prefix, $name, $password)
     {
+        if (!isset($name) || !isset($password) || !isset($tid))
+            return false;
+        $this->db->from('teacher_user');
+        $this->db->where('name', $name);
+        $user = $this->db->get()->result_array();
+        //die($user[0]['status']);
+        if (($user[0]['status']) == 'done')
+            return false;
+        $data = array(
+            'password' => sha1($password),
+            'id' => $tid,
+            'status' => 'done',
+            'prefix' => $prefix
+        );
+        $this->db->from('teacher_user');
+        $this->db->where('name', $name);
+        //$user = $this->db->get()->result();
+        $this->db->update('teacher_user', $data);
+
         $url = 'http://jwzx.cqupt.edu.cn/new/labkebiao/showteakebiao2.php?tid=' . $tid;
         $str = file_get_contents($url);
         $str = str_replace(array("\r\n"), "", $str);
@@ -135,26 +154,6 @@ class User_model extends CI_Model {
 
             $this->db->insert('tid_hid', $data);
         }
-
-        if (!isset($name) || !isset($password) || !isset($tid))
-            return false;
-        $this->db->from('teacher_user');
-        $this->db->where('name', $name);
-        $user = $this->db->get()->result_array();
-        //die($user[0]['status']);
-        if (($user[0]['status']) == 'done')
-            return false;
-        $data = array(
-            'password' => sha1($password),
-            'id' => $tid,
-            'status' => 'done',
-            'prefix' => $prefix
-        );
-        $this->db->from('teacher_user');
-        $this->db->where('name', $name);
-        //$user = $this->db->get()->result();
-        $this->db->update('teacher_user', $data);
-
 
         return true;
     }
