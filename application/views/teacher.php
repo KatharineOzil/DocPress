@@ -24,11 +24,13 @@ foreach ($works as $key => $work) {
   </div>
   <div class="mdl-card__supporting-text">
   	<?php
-		echo $work->content;
-		if ($work->attachment) {
-		    echo '<br><br><small>附件下载：<a href="'. base_url('attachment/' . $work->attachment) . '">查看附件</a></smaill>';
-		}
+      echo "布置时间：" . $work->create_time;
+  		echo '<br>' . $work->content;
+  		if ($work->attachment) {
+  		    echo '<br><br><small>附件下载：<a href="'. base_url('attachment/' . $work->attachment) . '">查看附件</a></smaill>';
+  		}
 	 ?>
+
   </div>
   <div class="mdl-card__actions mdl-card--border">
     <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="<?php echo site_url('homework_detail/' . $work->id); ?>">

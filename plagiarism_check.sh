@@ -10,7 +10,7 @@ if [ -f outtree ]
 then
 	rm -f outtree
 fi
-/usr/local/bin/phylip/neighbor <<eof
+/usr/local/bin/neighbor <<eof
 y
 y
 eof
@@ -22,10 +22,12 @@ then
 	rm -f plotfile
 fi
 
-/usr/local/bin/phylip/drawgram <<eof
-/home/www/html/hupload/stu_task/fontfile
+/usr/local/bin/drawgram <<eof
+/Library/WebServer/Documents/stu_task/fontfile
 y
 eof
 
 cp plotfile plotfile.ps
-convert plotfile.ps ../DrawT/$1.svg
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin
+/usr/local/bin/convert plotfile.ps ../DrawT/$1.svg
+/usr/local/bin/convert plotfile.ps $1.svg

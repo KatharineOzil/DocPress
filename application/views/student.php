@@ -44,6 +44,7 @@ foreach ($works as $key => $work) {
       </form>
     </div>
     <span class="mdl-navigation__link teacher-name"><i class="material-icons">account_circle</i>&nbsp;<?php echo $work->name; ?></span>
+    <span class="mdl-navigation__link create_time"></span> <?php echo $work->create_time; ?>
     <?php 
     if(isset($work->feedback_file) && $work->feedback_file)
         echo '<a class="mdl-navigation__link" href="'. base_url('reply/' . $work->id . '/' . $work->feedback_file) . '">(查看教师批改反馈)</a>'; 

@@ -21,6 +21,7 @@
 				<th class="mdl-data-table__cell--non-numeric">学号</th>
 				<th class="mdl-data-table__cell--non-numeric">姓名</th>
 				<th class="mdl-data-table__cell--non-numeric">教学班号</th>
+				<th class="mdl-data-table__cell--non-numeric">提交时间</th>
 				<th class="mdl-data-table__cell--non-numeric">下载链接</th>
 				<th class="mdl-data-table__cell--non-numeric">批改反馈</th>
 				<th class="mdl-data-table__cell--non-numeric">批改状态</th>
@@ -35,7 +36,8 @@
 				echo '<td class="mdl-data-table__cell--non-numeric">' . $value->user->id . '</td>';
 				echo '<td class="mdl-data-table__cell--non-numeric">' . $value->user->name . '</td>';
 				echo '<td class="mdl-data-table__cell--non-numeric">' . $hid . '</td>';
-				echo '<td class="mdl-data-table__cell--non-numeric"><a class="mdl-navigation__link" href="' . base_url('upload/' . $work->title . $work->creator_id . '/' . $value->file_name) . '">点击下载</a></td>';
+				echo '<td class="mdl-data-table__cell--non-numeric">' . $value->submit_time . '</td>';
+				echo '<td class="mdl-data-table__cell--non-numeric"><a class="mdl-navigation__link" href="' . base_url('upload/' . $work->id . '/' . $value->file_name) . '">点击下载</a></td>';
 				echo '<td class="mdl-data-table__cell--non-numeric"><a href="##" class="submit-label-feedback mdl-navigation__link" data-id="' . $value->id . '">上传反馈</a></td>';
 				echo '<td class="mdl-data-table__cell--non-numeric">';
 

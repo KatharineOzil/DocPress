@@ -77,7 +77,8 @@ class Homework_model extends CI_Model {
 			'title' => $title,
 			'content' => $content,
 			'creator_id' => $creator_id,
-			'attachment' => $file_name
+			'attachment' => $file_name,
+			'create_time' => date('Y-m-d H:i:s')
 		);
 
 		$this->db->insert('homework', $data);
@@ -109,7 +110,7 @@ class Homework_model extends CI_Model {
 				return array();
 			}
 		}
-		$this->db->select('homework.id as id, homework.title as title, homework.attachment as attachment, homework.content as content, group_concat(homework_hid.hid) as hid, teacher_user.name as name');
+		$this->db->select('homework.id as id, homework.title as title, homework.create_time as create_time ,homework.attachment as attachment, homework.content as content, group_concat(homework_hid.hid) as hid, teacher_user.name as name');
 		$this->db->from('homework');
 		$this->db->order_by('homework.id desc');
 		$this->db->join('teacher_user', 'teacher_user.id = homework.creator_id');
@@ -256,6 +257,7 @@ class Homework_model extends CI_Model {
 				'homework_id' => $homework_id,
 				'user_id' => $user_id,
 				'file_name' => $file_name,
+				'submit_time' => date('Y-m-d H:i:s')
 			     );
 		$this->db->from('homework_submission');
 		$this->db->where('homework_id', $homework_id);
@@ -263,13 +265,13 @@ class Homework_model extends CI_Model {
 		$query = $this->db->get()->result();
 		if (count($query)) {
 			$query = $query[0];
-			@unlink('upload/' . $homework[0]->title . $homework[0]->creator_id . '/' . $query->file_name);
+			@unlink('upload/' . $homework[0]->id . '/' . $query->file_name);
 			$this->db->where('id', $query->id);
 			$this->db->update('homework_submission', $data);
 		} else {
 			$this->db->insert('homework_submission', $data);
 		}
-		move_uploaded_file($_FILES["the_file"]["tmp_name"], "upload/" . $homework[0]->title . $homework[0]->creator_id .  '/' . $file_name);
+		move_uploaded_file($_FILES["the_file"]["tmp_name"], "upload/" . $homework[0]->id .  '/' . $file_name);
 	}
 
 	function reply($id, $file_name)
@@ -282,10 +284,10 @@ class Homework_model extends CI_Model {
 		$this->db->update('homework_submission', $data);
 	}
 
-	function check_homework($homework_title)
+	function check_homework($homework_id)
 	{
-		$homework_title = escapeshellarg($homework_title);
-		$file = $homework_title . $this->session->userdata['id'];
+		$homework_id = escapeshellarg($homework_id);
+		$file = $homework_id;
 		$handle = popen("/usr/bin/python compare.py '$file' 2>&1 ", "r");
 		$data = '';
 		while ($temp = fread($handle, 1024)) {
@@ -295,12 +297,12 @@ class Homework_model extends CI_Model {
 		return $data;
 	}
 
-	function homework_tree($homework_title)
+	function homework_tree($homework_id)
 	{
-		$homework_title = urldecode($homework_title);
-		$file = 'upload/'.$homework_title.$this->session->userdata['id'].'/infile';
-		$homework_title = escapeshellarg($homework_title);
-		$file_all=$homework_title.$this->session->userdata['id'];
+		//$homework_title = urldecode($homework_title);
+		//$file = 'upload/'.$homework_id.'/infile';
+		$homework_id = escapeshellarg($homework_id);
+		$file_all=$homework_id;
 		$stuNum = exec("head -n 1 'upload/$file_all/$file_all.txt'");
 		exec("./dist2matrix.pl 'upload/$file_all/$file_all.txt' '$stuNum' 2>&1 >$file");
 		exec("./plagiarism_check.sh '$file_all'");

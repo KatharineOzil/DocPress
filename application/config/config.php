@@ -356,6 +356,7 @@ $config['rewrite_short_tags'] = FALSE;
 |
 */
 $config['proxy_ips'] = '';
+$config['time_zone']= date_default_timezone_set('Asia/shanghai');
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

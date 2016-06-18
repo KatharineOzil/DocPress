@@ -97,7 +97,7 @@ class Welcome extends CI_Controller {
 
 	public function ajax_check_homework($id) {
 		$work = $this->homework->get_homework_detail($id);
-		$result = $this->homework->check_homework($work->title);
+		$result = $this->homework->check_homework($work->id);
 		echo $result;
 	}
 
@@ -111,8 +111,8 @@ class Welcome extends CI_Controller {
 		$this->load->view('check_homework', $data);
 	}
 
-	public function ajax_homework_tree($title) {
-		$this->homework->homework_tree($title);
+	public function ajax_homework_tree($id) {
+		$this->homework->homework_tree($id);
 		echo '转换成功';
 	}
 
@@ -184,8 +184,8 @@ class Welcome extends CI_Controller {
 		}
 		$file_name = $stu_hid . "_" . $user->id . "_" . $user->name . $extension;
 
-		if (!is_dir('upload/' . $homework->title . $homework->creator_id)){
-			mkdir('upload/' . $homework->title . $homework->creator_id);
+		if (!is_dir('upload/' . $homework->id)){
+			mkdir('upload/' . $homework->id);
 		}
 		$this->homework->submit($id, $this->session->userdata['id'], $file_name);
 		redirect();
@@ -209,7 +209,7 @@ class Welcome extends CI_Controller {
 		$work = $this->homework->getHomework($id);
 		$homework = $this->homework->get_homework_detail($id);
 		foreach ($work->submissions as $key => $value) {
-			$this->zip->read_file('upload/' . $homework->title . $homework->creator_id . '/' . $value->file_name );
+			$this->zip->read_file('upload/' . $homework->id . '/' . $value->file_name );
 		}
 		$this->zip->download($homework->title . '作业打包.zip');
 	}
