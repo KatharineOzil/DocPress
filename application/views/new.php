@@ -23,7 +23,7 @@
 	  <input type="file" class="mdl-textfield__input" id="file" name="the_file" >
     </div>
     <div class="mdl-textfield mdl-js-textfield is-upgraded">
-      上交截止日期,格式如：2015/01/01
+      上交截止日期,格式如：2015-01-01
           <input class="mdl-textfield__input" type="text" id="time" name="ddl" >
         </div>
       <div>

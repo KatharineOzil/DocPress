@@ -63,8 +63,8 @@ class Homework_model extends CI_Model {
 		{
 			$original_name = $_FILES["the_file"]["name"];
 			$extension = "." . pathinfo($original_name, PATHINFO_EXTENSION);
-			if (!in_array($extension, array(".doc", ".docx", ".pdf", ".zip"))) {
-				die('<script>alert("不是符合的文件类型（.doc、.docx、.pdf、.zip）");history.go(-1);</script>');
+			if (!in_array($extension, array(".doc", ".docx", ".pdf"))) {
+				die('<meta charset="utf-8"><script>alert("不是符合的文件类型（.doc、.docx、.pdf）");history.go(-1);</script>');
 			}
 			$rand_num = rand(100000, 999999);
 			$file_name = "$title-$rand_num$extension";
@@ -73,8 +73,12 @@ class Homework_model extends CI_Model {
 			$file_name = NULL;
 		}
 		
-		$ddl = strtotime($this->input->post('ddl'));
-		die($ddl);
+		$ddl = $this->input->post('ddl');
+		if (!preg_match('/^20[\d]{2}-[\d]{2}-[\d]{2}$/', $ddl))
+		{
+			die('<meta charset="utf-8"><script>alert("请检查截止日期格式");history.go(-1);</script>');
+		}
+		$ddl = strtotime($ddl);	
 		$data = array(
 			'title' => $title,
 			'content' => $content,
