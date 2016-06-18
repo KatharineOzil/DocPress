@@ -29,10 +29,11 @@ foreach ($works as $key => $work) {
     ?></h2>
   </div>
   <div class="mdl-card__supporting-text">
+    <small><?php echo "截止时间：" . date('Y-m-d H:i:s', $work->ddl); ?></small><br><br>
     <?php
-	echo $work->content;
+	echo str_replace("\n", "<br>", $work->content);
 	if ($work->attachment) {
-		echo '<br><br><small>附件下载：<a href="'. base_url('attachment/' . $work->attachment) . '">查看附件</a></smaill>';
+		echo '<br><br><small>附件下载：<a href="'. base_url('attachment/' . $work->attachment) . '">查看附件</a></small>';
 	}
     ?>
   </div>
@@ -44,16 +45,20 @@ foreach ($works as $key => $work) {
       </form>
     </div>
     <span class="mdl-navigation__link teacher-name"><i class="material-icons">account_circle</i>&nbsp;<?php echo $work->name; ?></span>
-    <span class="mdl-navigation__link create_time"></span> <?php echo $work->create_time; ?>
     <?php 
     if(isset($work->feedback_file) && $work->feedback_file)
         echo '<a class="mdl-navigation__link" href="'. base_url('reply/' . $work->id . '/' . $work->feedback_file) . '">(查看教师批改反馈)</a>'; 
     ?>
     <a class="mdl-navigation__link">
-    <?php if (!$work->done) { ?>
-      <button class="submit-label mdl-button mdl-js-button mdl-button--primary" data-id="<?php echo $work->id; ?>">上交作业</button>
+
+    <?php if ($work->ddl > time()) { ?>
+        <?php if (!$work->done) { ?>
+          <button class="submit-label mdl-button mdl-js-button mdl-button--primary" data-id="<?php echo $work->id; ?>">上交作业</button>
+        <?php } else { ?>
+          <button class="submit-label mdl-button mdl-js-button <?php echo $work->done ? 'homework-done-button' : 'mdl-button--primary';?>" data-id="<?php echo $work->id; ?>">重新上交</button>
+        <?php } ?>
     <?php } else { ?>
-      <button class="submit-label mdl-button mdl-js-button <?php echo $work->done ? 'homework-done-button' : 'mdl-button--primary';?>" data-id="<?php echo $work->id; ?>">重新上交</button>
+          <button class="submit-label mdl-button mdl-js-button" disabled>停止上交</button>
     <?php } ?>
     </a>
 </div>

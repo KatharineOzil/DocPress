@@ -180,7 +180,7 @@ class User_model extends CI_Model {
             return false;
         }
         $this->db->from('teacher_user');
-        $this->db->where('name', $name);
+        $this->db->where('id', $name);
         $this->db->where('password', sha1($password));
 	$user = $this->db->get()->result();
         //echo $this->db->last_query();

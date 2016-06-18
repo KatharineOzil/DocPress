@@ -171,7 +171,11 @@ class Welcome extends CI_Controller {
 		$homework = $this->homework->get_homework_detail($id);
 		if (!$homework) {
 			redirect();
-		}
+        }
+
+        if ($homework->ddl < time()) {
+			die('<meta charset="utf-8"><script>alert("已经到截止时间，不能提交作业，请联系教师");history.go(-1);</script>');
+        }
 		$hwid = $homework->hid;
 		$hid_list = explode(',' , $hwid);
 		foreach ($hid_list as $hid) {
@@ -191,6 +195,19 @@ class Welcome extends CI_Controller {
 		$this->homework->submit($id, $this->session->userdata['id'], $file_name);
 		redirect();
 	}
+
+	public function old_homework()
+	{
+		if (!isset($this->session->userdata['id'])) {
+			redirect('login');
+        }
+        $data['works'] = $this->homework->getHomeworks($this->session->userdata['id'], $this->session->userdata['level'], true);
+        if ($this->session->userdata['level'] == 'teacher') {
+            $this->load->view('teacher', $data);
+        } else if ($this->session->userdata['level'] == 'student') {
+            $this->load->view('student', $data);
+        }
+    }
 
 	public function homework_detail($id)
 	{

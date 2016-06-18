@@ -104,7 +104,7 @@ class Ajax extends CI_Controller {
 		$name = $this->input->post('name');
 		$level = $this->input->post('level');
 		if ($level === 'student') {
-			if (strlen($sid) != 10 || strlen($class) >= 7) {
+			if (strlen($sid) != 10 || strlen($class) < 7) {
 				die("请输入正确的信息！");
 			}
 		}
@@ -144,7 +144,10 @@ class Ajax extends CI_Controller {
 	public function login()
 	{
 		$password = $this->input->post('password');
-		$username = $this->input->post('username');
+        $username = $this->input->post('username');
+        if (!preg_match('/^\d+$/', $username)) {
+            die('用户名或密码错误');
+        }
 		$level = $this->input->post('level');
 		if ($level == 'student') {
 			$user = $this->user->login_student($username, $password);

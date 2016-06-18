@@ -100,7 +100,7 @@ class Homework_model extends CI_Model {
 		return $insert_id;
 	}
 
-	function getHomeworks($user_id = 0, $level='student')
+	function getHomeworks($user_id = 0, $level='student', $old=false)
 	{
 		if ($level === 'student') {
 			$hid = array();
@@ -117,7 +117,7 @@ class Homework_model extends CI_Model {
 				return array();
 			}
 		}
-		$this->db->select('homework.id as id, homework.title as title, homework.create_time as create_time ,homework.attachment as attachment, homework.content as content, group_concat(homework_hid.hid) as hid, teacher_user.name as name');
+		$this->db->select('homework.id as id, homework.title as title, homework.create_time as create_time ,homework.attachment as attachment, homework.content as content, group_concat(homework_hid.hid) as hid, homework.ddl as ddl, teacher_user.name as name');
 		$this->db->from('homework');
 		$this->db->order_by('homework.id desc');
 		$this->db->join('teacher_user', 'teacher_user.id = homework.creator_id');
@@ -129,7 +129,12 @@ class Homework_model extends CI_Model {
 			}
 		} else if ($level === 'teacher') {
 			$this->db->where('homework.creator_id', $user_id);
-		}
+        }
+        if ($old) {
+            $this->db->where('homework.ddl <', time());
+        } else {
+            $this->db->where('homework.ddl >', time());
+        }
 		$works = $this->db->get()->result();
 		foreach ($works as $key => $work) {
 			$work->done = false;

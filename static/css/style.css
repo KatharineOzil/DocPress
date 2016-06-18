@@ -122,3 +122,11 @@
   display: inline-block;
   width: 300px;
 }
+
+.submit-homework-card > .mdl-card__actions {
+    line-height: 36px;
+}
+
+.login-card-bottom {
+    line-height: 36px;
+}

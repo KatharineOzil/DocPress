@@ -20,12 +20,14 @@ foreach ($works as $key => $work) {
 ?>
 <div class="homework-card mdl-card mdl-shadow--2dp">
   <div class="mdl-card__title">
-    <h2 class="mdl-card__title-text"><?php echo $work->title . "($work->hid)"; ?></h2>
+    <h2 class="mdl-card__title-text">
+        <?php echo $work->title . "($work->hid)"; ?>
+    </h2>
   </div>
   <div class="mdl-card__supporting-text">
+    <small><?php echo "截止时间：" . date('Y-m-d H:i:s', $work->ddl); ?></small><br>
   	<?php
-      echo "布置时间：" . $work->create_time;
-  		echo '<br>' . $work->content;
+  		echo '<br>' . str_replace("\n", "<br>", $work->content);
   		if ($work->attachment) {
   		    echo '<br><br><small>附件下载：<a href="'. base_url('attachment/' . $work->attachment) . '">查看附件</a></smaill>';
   		}

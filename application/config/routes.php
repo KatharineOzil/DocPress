@@ -52,6 +52,7 @@ $route['homework_tree/(:any)'] = "welcome/homework_tree/$1";
 $route['visitor'] = "welcome/visitor";
 $route['new'] = "welcome/new_homework"; 
 $route['change_password'] = "welcome/change_password";
+$route['old_homework'] = "welcome/old_homework";
 $route['404_override'] = '';
 
 

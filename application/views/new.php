@@ -21,11 +21,14 @@
     <div class="mdl-textfield mdl-js-textfield is-upgraded">
       上传附件（可选）
 	  <input type="file" class="mdl-textfield__input" id="file" name="the_file" >
+          <label class="mdl-textfield__label" for="file"></label>
     </div>
+    <div>
     <div class="mdl-textfield mdl-js-textfield is-upgraded">
-      上交截止日期,格式如：2015-01-01
-          <input class="mdl-textfield__input" type="text" id="time" name="ddl" >
+          <input class="mdl-textfield__input" type="text" id="time" name="ddl">
+          <label class="mdl-textfield__label" for="hid">截止时间，如：2016-11-11</label>
         </div>
+    </div>
       <div>
         <div class="mdl-textfield mdl-js-textfield">
           <input class="mdl-textfield__input" type="text" id="hid" name="hid">
