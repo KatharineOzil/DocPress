@@ -72,13 +72,16 @@ class Homework_model extends CI_Model {
 		} else {
 			$file_name = NULL;
 		}
-
+		
+		$ddl = strtotime($this->input->post('ddl'));
+		die($ddl);
 		$data = array(
 			'title' => $title,
 			'content' => $content,
 			'creator_id' => $creator_id,
 			'attachment' => $file_name,
-			'create_time' => date('Y-m-d H:i:s')
+			'create_time' => date('Y-m-d H:i:s'),
+			'ddl' => $ddl 
 		);
 
 		$this->db->insert('homework', $data);
