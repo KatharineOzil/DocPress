@@ -31,11 +31,13 @@
     <div>
     已有教学班列表<br>
     <?php
-    if (isset($hid)) {
+    if (isset($hid) && !empty($hid)) {
         foreach ($hid as $_ => $h) {
             echo '<span class="mdl-button mdl-js-button mdl-js-ripple-effect h_class" id="' . $h->hid . '">' . $h->hid . '</span>';
             echo '<div class="mdl-tooltip" for="' . $h->hid . '">' . $h->title . '</div>';
         }
+    } else {
+            echo '<span class="mdl-button mdl-js-button mdl-js-ripple-effect h_class">无教学班</span>';
     }?>
     </div>
     <br>
@@ -64,6 +66,9 @@ $('#hid').bind('focus keypress keydown focusout', function() {
 
 $('.h_class').click(function() {
   var data = $('#hid').val();
+  if (data != "无教学班") {
+    return;
+  }
   if (data) {
     data = data + '/' + $(this).text();
   } else {
