@@ -1,12 +1,16 @@
 <?php $this->load->view('header'); ?>
 
-
 <div class="homework-detail-card mdl-card mdl-shadow--2dp">
   <div class="mdl-card__title">
     <h2 class="mdl-card__title-text"><?php echo $work->title?> 作业检查情况&nbsp;&nbsp;</h2>
-<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="check_homework()">
-  开始检查
-</button>&nbsp;&nbsp;
+	<div>
+	<input class="mdl-slider mdl-js-slider" type="range" id="s1" min="10" max="100" value="10" step="10">
+	<br>
+	准确&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;灵敏
+	</div>
+	<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="check_homework()">
+	  开始检查
+	</button>&nbsp;&nbsp;
     <div class="mdl-spinner mdl-js-spinner is-active check-load image-load-none"></div>
   </div>
   <div class="mdl-card__supporting-text">

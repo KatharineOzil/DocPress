@@ -18,6 +18,9 @@
           <label class="mdl-textfield__label" for="content">作业描述</label>
         </div>
       </div>
+	<div class="mdl-data-table__cell--non-numeric">
+	  <input type="file" name="the_file" >
+	</div>
       <div>
         <div class="mdl-textfield mdl-js-textfield">
           <input class="mdl-textfield__input" type="text" id="hid" name="hid">
@@ -36,12 +39,9 @@
     </div>
     <br>
       <div>
- 	    <strong style="color: #000">注意：同一门课程请务必多个教学班一起添加，不然检查作业的时候隔班检查不到</strong><br>
-        如果教学班列表中没有所需教学班，请自行添加。同一门课程多个教学班请用/隔开。例如：A1234567/A2345678<br>
+        如果教学班列表中没有所需教学班，请自行添加。<br>同一门课程多个教学班请用/隔开。例如：A1234567/A2345678<br>
+ 	    <strong style="color: #000">注意：同一门课程请务必多个教学班一起添加，以便检查</strong><br>
       </div>
-	<div class="mdl-data-table__cell--non-numeric">
-	  <input type="file" name="the_file" >
-	</div>
      </form>
   </div>
   <div class="mdl-card__actions mdl-card--border">
