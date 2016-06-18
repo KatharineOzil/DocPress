@@ -14,7 +14,7 @@ def readfile(filename):
     #    data = data.replace(i, '')
     return data
 
-def file_extension(path):  
+def file_extension(path):
     return os.path.splitext(os.path.basename(path))
 
 def transformation_format(path):
@@ -31,9 +31,9 @@ def transformation_format(path):
             os.system('pdftotext \'%s\' \'task_temp/%s.txt\'' % (path, name))
     return 'task_temp/%s.%s' % (name, 'txt')
 
-def diff_page(base_content, diff_content):
+def diff_page(base_content, diff_content, range_=10):
     # return SequenceMatcher(None, base_content, diff_content).ratio()
-    return float(os.popen('/usr/local/bin/diffh \'%s\' \'%s\' 10' % (base_content, diff_content)).read())
+    return float(os.popen('/usr/local/bin/diffh \'%s\' \'%s\' %d' % (base_content, diff_content, range_)).read())
 
 #def get_files(ext):
 #    return [i for i in os.listdir('./') if i.endswith(ext)]
@@ -42,6 +42,16 @@ if __name__ == '__main__':
     import itertools
     import shutil
     import glob
+
+    if len(sys.argv) < 2:
+        print 'Missing arguments, Usage: compare.py <dir> <range>'
+        exit(1)
+
+    range_ = sys.argv[2]
+    if not range_.isdigit():
+        range_ = 10
+    else:
+        range_ = int(range_)
 
     if not os.path.exists('upload/' + sys.argv[1]):
         print '暂时没有人上交作业'
@@ -71,7 +81,7 @@ if __name__ == '__main__':
             a, b = i
             origin_path = transformation_format(a)
             compare_path = transformation_format(b)
-            result = diff_page(origin_path, compare_path) * 100
+            result = diff_page(origin_path, compare_path, range_) * 100
             print a,' ', b, ' ',
             print '%.2f%%' % result
             f.write('%s\t%s\t%.4f\n' % (a.split('_')[1], b.split('_')[1], 1-result/100.0))
