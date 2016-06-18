@@ -109,3 +109,16 @@
   font-size: 0.1em;
   margin: 2px 3px;
 }
+
+.process-container {
+  color: #AAA;
+  display: inline-block;
+  font-size: 14px;
+  width: 400px;
+  text-align: center;
+}
+
+.process-bar {
+  display: inline-block;
+  width: 300px;
+}
