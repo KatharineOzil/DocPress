@@ -130,3 +130,7 @@
 .login-card-bottom {
     line-height: 36px;
 }
+
+.mdl-card {
+  overflow: inherit;
+}

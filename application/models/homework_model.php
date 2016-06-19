@@ -73,8 +73,11 @@ class Homework_model extends CI_Model {
 			$file_name = NULL;
 		}
 
-		$ddl = $this->input->post('ddl');
-		if (!preg_match('/^20[\d]{2}-[\d]{2}-[\d]{2}$/', $ddl))
+        $ddl = $this->input->post('ddl');
+        if (!$ddl) {
+            $ddl = 0;
+        }
+		if (!preg_match('/^20[\d]{2}-[\d]{2}-[\d]{2}$/', $ddl) && $ddl != 0)
 		{
 			die('<meta charset="utf-8"><script>alert("请检查截止日期格式");history.go(-1);</script>');
 		}
@@ -330,6 +333,15 @@ class Homework_model extends CI_Model {
 	    $this->db->select("hid, title");
 	    $this->db->where('tid', $id);
 	    return $this->db->get()->result();
-        }
+    }
 
+    function mark_as($method, $id) {
+        if ($method == "new") {
+            $this->db->where('id', $id);
+            $this->db->update('homework', array('ddl' => 0));
+        } else if ($method == "old") {
+            $this->db->where('id', $id);
+            $this->db->update('homework', array('ddl' => time()));
+        }
+    }
 }

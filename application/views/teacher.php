@@ -59,6 +59,19 @@ foreach ($works as $key => $work) {
     <li class="mdl-menu__item student-login" onclick="if (confirm('确定要删除吗？')) {location.href='<?php echo site_url('welcome/delete_homework/' . $work->id);?>'};">
       <a class="mdl-navigation__link">删除</a>
     </li>
+    <?php
+        if ($work->ddl < time() && $work->ddl != 0) {
+    ?>
+    <li class="mdl-menu__item student-login" onclick="mark_as('new', '<?php echo $work->id;?>')">开始提交</li>
+    <?php
+        } else {
+    ?>
+    <li class="mdl-menu__item student-login" onclick="mark_as('old', '<?php echo $work->id;?>')">截止提交</li>
+    <?php
+        }
+    ?>
+    <?php
+    ?>
     <li class="mdl-menu__item student-login"><a class="mdl-navigation__link" href="<?php echo site_url('welcome/download/' . $work->id); ?>">
       打包下载
     </a></li>
@@ -66,5 +79,14 @@ foreach ($works as $key => $work) {
   </div>
 </div>
 <?php } ?>
+
+<script>
+    function mark_as(method, id) {
+        $.get('<?php echo site_url('welcome/mark_as/'); ?>' + '/'  + method + '/' + id, function(data) {
+            alert(data);
+            location.href = '<?php echo site_url('/'); ?>';
+        });
+    }
+</script>
 
 <?php $this->load->view('footer'); ?>

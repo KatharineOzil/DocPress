@@ -81,7 +81,7 @@ class Welcome extends CI_Controller {
 	}
 
 	public function login()
-	{	
+	{
 		//if (isset($this->session->userdata['id'])) {
 			//redirect();
 		//}
@@ -126,7 +126,6 @@ class Welcome extends CI_Controller {
 		$data['result'] = $this->homework->homework_tree($work->id);
 		$this->load->view('homework_tree', $data);
 	}
-	
 
 	public function new_homework()
 	{
@@ -262,7 +261,12 @@ class Welcome extends CI_Controller {
 		move_uploaded_file($_FILES["the_file"]["tmp_name"], "reply/" . $work->homework_id . '/' .$file_name);
 		$this->homework->reply($id, $file_name);
 		redirect('homework_detail/' . $homework->id);
-	}
+    }
+
+    public function mark_as($method, $id) {
+        $this->homework->mark_as($method, $id);
+        echo '修改完成';
+    }
 
 	public function visitor()
 	{
