@@ -6,7 +6,7 @@ if (!$works) {
     <h2 class="mdl-card__title-text">Warning</h2>
   </div>
   <div class="mdl-card__supporting-text">
-    还没有发布过作业
+    没有要显示的作业
   </div>
   <div class="mdl-card__actions mdl-card--border">
     <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="<?php echo site_url('new');?>">
