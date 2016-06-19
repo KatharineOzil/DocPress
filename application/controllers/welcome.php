@@ -123,7 +123,7 @@ class Welcome extends CI_Controller {
 		}
 		$work = $this->homework->get_homework_detail($id);
 		$data['work'] = $work;
-		// $data['result'] = $this->homework->homework_tree($work->title);
+		$data['result'] = $this->homework->homework_tree($work->id);
 		$this->load->view('homework_tree', $data);
 	}
 	

@@ -6,9 +6,8 @@
   </div>
 
   <div class="mdl-card__supporting-text">
-   <img src="<?php echo base_url("upload/DrawT/$work->title$work->creator_id.svg")?>" style="width: 100%"/ onerror="$(this).hide();$(this).parent().text('暂时没有生成图片')">
+   <img src="<?php echo base_url("upload/DrawT/$work->id.svg")?>" style="width: 100%"/ onerror="$(this).hide();$(this).parent().text('暂时没有生成图片')">
   </div>
-
 </div>
 	
 	
