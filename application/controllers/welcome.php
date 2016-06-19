@@ -173,7 +173,7 @@ class Welcome extends CI_Controller {
 			redirect();
         }
 
-        if ($homework->ddl < time()) {
+        if ($homework->ddl < time() && $homework->ddl != 0) {
 			die('<meta charset="utf-8"><script>alert("已经到截止时间，不能提交作业，请联系教师");history.go(-1);</script>');
         }
 		$hwid = $homework->hid;
@@ -192,8 +192,8 @@ class Welcome extends CI_Controller {
 		if (!is_dir('upload/' . $homework->id)){
 			mkdir('upload/' . $homework->id);
 		}
-		$this->homework->submit($id, $this->session->userdata['id'], $file_name);
-		redirect();
+        $this->homework->submit($id, $this->session->userdata['id'], $file_name);
+        die('<meta charset="utf-8"><script>alert("上交成功");location.href = "' . site_url('/') . '";</script>');
 	}
 
 	public function old_homework()

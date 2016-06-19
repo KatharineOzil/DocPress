@@ -25,7 +25,14 @@ foreach ($works as $key => $work) {
     </h2>
   </div>
   <div class="mdl-card__supporting-text">
-    <small><?php echo "截止时间：" . date('Y-m-d H:i:s', $work->ddl); ?></small><br>
+    <small>
+    <?php
+    if ($work->ddl != 0) {
+        echo "截止时间：" . date('Y-m-d', $work->ddl);
+    } else {
+        echo "截止时间：不限制";
+    }
+    ?></small><br>
   	<?php
   		echo '<br>' . str_replace("\n", "<br>", $work->content);
   		if ($work->attachment) {

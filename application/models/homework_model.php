@@ -12,7 +12,7 @@ class Homework_model extends CI_Model {
 		//$homework_type = $this->input->post('type');
 		$hid_list = explode('/' , $hwid);
 		$responses = array();
-		
+
 		$this->db->from('homework');
 		$this->db->where('title',$title);
 		$query = $this->db->get()->result();
@@ -23,7 +23,7 @@ class Homework_model extends CI_Model {
 
 		// fetch student lists from jwzx and check
 		foreach ($hid_list as $hid) {
-			if (!preg_match('/(SJ|A|SK|R)\d{5,12}/', $hid, $type)) {
+			if (!preg_match('/^(SJ|A|SK|R)\d{5,12}$/', $hid, $type)) {
 				die('<meta charset="utf-8"><script>alert("教学班号不正确");history.back(-1);</script>');
 			}
 			$sjk_url = "http://jwzx.cqupt.edu.cn/new/labkebiao/showjxbStuList.php?jxb=$hid";
@@ -45,7 +45,7 @@ class Homework_model extends CI_Model {
 			if(!$this->db->count_all_results('stu_list')){
 				preg_match_all('/(20[\d]{8})<\/td>\s*?<td\s*?>(.*?)<\/td>/', $str, $data);
 				$result = array_map(null, $data[1], $data[2]);
-		
+
 				foreach ($result as $key => $value) {
 					$value[1] = iconv("GBK", "UTF-8", $value[1]);
 					$list = array(
@@ -72,20 +72,20 @@ class Homework_model extends CI_Model {
 		} else {
 			$file_name = NULL;
 		}
-		
+
 		$ddl = $this->input->post('ddl');
 		if (!preg_match('/^20[\d]{2}-[\d]{2}-[\d]{2}$/', $ddl))
 		{
 			die('<meta charset="utf-8"><script>alert("请检查截止日期格式");history.go(-1);</script>');
 		}
-		$ddl = strtotime($ddl);	
+		$ddl = strtotime($ddl);
 		$data = array(
 			'title' => $title,
 			'content' => $content,
 			'creator_id' => $creator_id,
 			'attachment' => $file_name,
 			'create_time' => date('Y-m-d H:i:s'),
-			'ddl' => $ddl 
+			'ddl' => $ddl
 		);
 
 		$this->db->insert('homework', $data);
@@ -96,7 +96,7 @@ class Homework_model extends CI_Model {
 				'hid' => $hid
 			);
 			$this->db->insert('homework_hid', $data);
-		} 
+		}
 		return $insert_id;
 	}
 
@@ -109,31 +109,37 @@ class Homework_model extends CI_Model {
 			$this->db->where('sid', $user_id);
 			$result = $this->db->get()->result();
 			foreach($result as $k => $v) {
-				array_push($hid, $v->hid);	
+				array_push($hid, $v->hid);
 			}
 			if (empty($hid)) {
 				return array();
 			}
 		}
-		$this->db->select('homework.id as id, homework.title as title, homework.create_time as create_time ,homework.attachment as attachment, homework.content as content, group_concat(homework_hid.hid) as hid, homework.ddl as ddl, teacher_user.name as name');
-		$this->db->from('homework');
-		$this->db->order_by('homework.id desc');
-		$this->db->join('teacher_user', 'teacher_user.id = homework.creator_id');
-		$this->db->join('homework_hid', 'homework_hid.homework_id = homework.id');
-		$this->db->group_by('homework.id');
+        $this->db->select('H.id as id, H.title as title, H.create_time as create_time ,H.attachment as attachment, H.content as content, group_concat(homework_hid.hid) as hid, H.ddl as ddl, teacher_user.name as name');
+		$this->db->from('homework as H');
+		$this->db->order_by('H.id desc');
+		$this->db->join('teacher_user', 'teacher_user.id = H.creator_id');
+		$this->db->join('homework_hid', 'homework_hid.homework_id = H.id');
+		$this->db->group_by('H.id');
 		if ($level === 'student') {
 			foreach ($hid as $h) {
 				$this->db->or_where('homework_hid.hid', $h);
 			}
 		} else if ($level === 'teacher') {
-			$this->db->where('homework.creator_id', $user_id);
+			$this->db->where('H.creator_id', $user_id);
 		}
-		if ($old) {
-		    $this->db->where('homework.ddl <', time());
-		} else {
-		    $this->db->where('homework.ddl >', time());
-		}
-		$works = $this->db->get()->result();
+        $works = $this->db->get()->result();
+
+        function ddl_filter_new($var) {
+            return $var->ddl > time() || $var->ddl == 0;
+        }
+
+        function ddl_filter_old($var) {
+            return $var->ddl < time() && $var->ddl != 0;
+        }
+
+        $works = $old ? array_filter($works, "ddl_filter_old") : array_filter($works, "ddl_filter_new");
+
 		foreach ($works as $key => $work) {
 			$work->done = false;
 			if ($level === 'student') {

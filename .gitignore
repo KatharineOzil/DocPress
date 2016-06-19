@@ -3,6 +3,7 @@
 *.doc
 *.pdf
 upload/*
+!upload/.gitkeep
 *.sql
 application/config/db.local.php
 .sw[op]
