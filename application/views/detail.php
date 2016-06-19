@@ -14,7 +14,7 @@
 		echo "当前没有人提交作业！";
 	} else {
 	?>
-  <h4 class="mdl-card__title-text"><?php echo $work->hid; ?> 提交列表</h4>
+  <h4 class="mdl-card__title-text"><?php echo $work->title; ?> 提交列表</h4>
 	<table class="mdl-data-table mdl-js-data-table detail-table">
 		<thead>
 			<tr>
@@ -25,6 +25,7 @@
 				<th class="mdl-data-table__cell--non-numeric">下载链接</th>
 				<th class="mdl-data-table__cell--non-numeric">批改反馈</th>
 				<th class="mdl-data-table__cell--non-numeric">批改状态</th>
+				<th class="mdl-data-table__cell--non-numeric">评分</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -47,6 +48,7 @@
 					echo '未反馈';
 				}
 				echo '</td>';
+				echo '<td class="mdl-data-table__cell--non-numeric">' . '<input class="mdl-textfield__input" type="text" id="score" name="score[]">' . '</td>';
 			?>
 			<div class="hide">
 				<form class="homework-submit" action="<?php echo site_url('welcome/submit_feedback/' . $value->id); ?>" method="post" enctype="multipart/form-data">
