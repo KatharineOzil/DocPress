@@ -108,8 +108,6 @@ class Homework_model extends CI_Model {
 			$this->db->from('stu_list');
 			$this->db->where('sid', $user_id);
 			$result = $this->db->get()->result();
-			//var_dump($result);
-			//die();
 			foreach($result as $k => $v) {
 				array_push($hid, $v->hid);	
 			}
@@ -129,12 +127,12 @@ class Homework_model extends CI_Model {
 			}
 		} else if ($level === 'teacher') {
 			$this->db->where('homework.creator_id', $user_id);
-        }
-        if ($old) {
-            $this->db->where('homework.ddl <', time());
-        } else {
-            $this->db->where('homework.ddl >', time());
-        }
+		}
+		if ($old) {
+		    $this->db->where('homework.ddl <', time());
+		} else {
+		    $this->db->where('homework.ddl >', time());
+		}
 		$works = $this->db->get()->result();
 		foreach ($works as $key => $work) {
 			$work->done = false;

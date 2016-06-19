@@ -200,14 +200,14 @@ class Welcome extends CI_Controller {
 	{
 		if (!isset($this->session->userdata['id'])) {
 			redirect('login');
-        }
-        $data['works'] = $this->homework->getHomeworks($this->session->userdata['id'], $this->session->userdata['level'], true);
-        if ($this->session->userdata['level'] == 'teacher') {
-            $this->load->view('teacher', $data);
-        } else if ($this->session->userdata['level'] == 'student') {
-            $this->load->view('student', $data);
-        }
-    }
+		}
+		$data['works'] = $this->homework->getHomeworks($this->session->userdata['id'], $this->session->userdata['level'], true);
+		if ($this->session->userdata['level'] == 'teacher') {
+		    $this->load->view('teacher', $data);
+		} else if ($this->session->userdata['level'] == 'student') {
+		    $this->load->view('student', $data);
+		}
+	}
 
 	public function homework_detail($id)
 	{

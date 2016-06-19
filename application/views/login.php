@@ -52,7 +52,7 @@
 $('.teacher-login').click(function() {
   $('.login-title').text('教师登录');
   $('.login-type').val('teacher');
-  $('.login-username').text('姓名');
+  $('.login-username').text('教师编号');
 })
 
 $('.student-login').click(function() {
