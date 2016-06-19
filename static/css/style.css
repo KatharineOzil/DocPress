@@ -55,6 +55,11 @@
 	width: 100%;
 }
 
+.detail-table-container {
+  margin: 0 auto;
+  overflow: visible;
+}
+
 .homework-detail-button {
 	margin: 0 10px;
 }
@@ -133,4 +138,31 @@
 
 .mdl-card {
   overflow: inherit;
+}
+
+.score-div {
+  padding: 0;
+  width: auto;
+}
+
+.score-div-input {
+  width: 30px;
+  text-align: center;
+  font-size: 14px;
+  display: inline-block;
+}
+
+.score-div-span {
+  display: inline-block;
+  transform-origin: top center;
+  z-index: 999;
+  background: rgba(97,97,97,.9);
+  border-radius: 2px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 14px;
+  max-width: 170px;
+  padding: 3px;
+  text-align: center;
 }

@@ -96,7 +96,13 @@ class Welcome extends CI_Controller {
 	}
 
 	public function ajax_check_homework($id) {
-		$work = $this->homework->get_homework_detail($id);
+		if ($this->session->userdata['level'] != 'teacher') {
+			redirect();
+		}
+        $work = $this->homework->get_homework_detail($id);
+        if ($work->creator_id != $this->session->userdata['id']) {
+			redirect('login');
+        }
 		$result = $this->homework->check_homework($work->id);
 		echo $result;
 	}
@@ -107,11 +113,21 @@ class Welcome extends CI_Controller {
 			redirect();
 		}
 		$work = $this->homework->get_homework_detail($id);
+        if ($work->creator_id != $this->session->userdata['id']) {
+			redirect('login');
+        }
 		$data['work'] = $work;
 		$this->load->view('check_homework', $data);
 	}
 
 	public function ajax_homework_tree($id) {
+		if ($this->session->userdata['level'] != 'teacher') {
+			redirect();
+		}
+		$work = $this->homework->get_homework_detail($id);
+        if ($work->creator_id != $this->session->userdata['id']) {
+			redirect('login');
+        }
 		$this->homework->homework_tree($id);
 		echo '转换成功';
 	}
@@ -122,6 +138,9 @@ class Welcome extends CI_Controller {
 			redirect();
 		}
 		$work = $this->homework->get_homework_detail($id);
+        if ($work->creator_id != $this->session->userdata['id']) {
+			redirect('login');
+        }
 		$data['work'] = $work;
 		$data['result'] = $this->homework->homework_tree($work->id);
 		$this->load->view('homework_tree', $data);
@@ -213,7 +232,10 @@ class Welcome extends CI_Controller {
 		if (!isset($this->session->userdata['level']) || $this->session->userdata['level'] != 'teacher') {
 			redirect('login');
 		}
-		$data['work'] = $this->homework->getHomework($id);
+        $data['work'] = $this->homework->getHomework($id);
+        if ($data['work']->creator_id != $this->session->userdata['id']) {
+			redirect('login');
+        }
 		$this->load->view('detail', $data);
 	}
 

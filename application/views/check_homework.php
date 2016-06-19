@@ -3,6 +3,7 @@
 <div class="homework-detail-card mdl-card mdl-shadow--2dp">
   <div class="mdl-card__title">
     <h2 class="mdl-card__title-text"><?php echo $work->title?> 作业检查情况&nbsp;&nbsp;</h2>
+    <a class="mdl-navigation__link" href="javascript:history.go(-1)" class="btn btn-default"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect homework-detail-button">返回</button></a>
 	<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="check_homework()">
 	  开始检查
     </button>&nbsp;&nbsp;
@@ -53,7 +54,7 @@ function check_homework() {
 
 function homework_tree() {
     $('.image-load-display').removeClass('image-load-none');
-	$.get("<?php echo site_url('welcome/ajax_homework_tree/' . $work->title);?>",
+	$.get("<?php echo site_url('welcome/ajax_homework_tree/' . $work->id);?>",
 	function (data, status) {
 		alert(data);
 		location.href = "<?php echo site_url('welcome/homework_tree/' . $work->id);?>";

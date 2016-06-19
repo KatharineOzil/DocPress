@@ -6,6 +6,7 @@ class Ajax extends CI_Controller {
 		parent::__construct();
 
 		$this->load->model('User_model', 'user', TRUE);
+		$this->load->model('Homework_model', 'homework', TRUE);
 
 	}
 
@@ -207,7 +208,6 @@ class Ajax extends CI_Controller {
 		if($teacher_list) {
 			$this->session->set_userdata('teacher_list', $teacher_list);
 			//echo '成功添加'.$this->session->userdata['teacher_list'];
-			
 			$user_list = explode(' ', $teacher_list);
 			foreach ($user_list as $value) {
 				$passwd = md5(md5(rand()) . rand());
@@ -221,11 +221,23 @@ class Ajax extends CI_Controller {
 				$this->db->insert('teacher_user', $list);
 			}
 			echo '成功添加' . $teacher_list;
-			
 		} else {
 			$this->load->view('add');
 		}
 	}
+
+    public function save_score($id)
+    {
+		if ($this->session->userdata['level'] != 'teacher') {
+			redirect();
+        }
+
+		$work = $this->homework->get_homework_detail($id);
+        if ($work->creator_id != $this->session->userdata['id']) {
+			redirect();
+        }
+        print_r($this->input->post('score'));
+    }
 
 }
 

@@ -87,7 +87,7 @@ class Homework_model extends CI_Model {
 			'content' => $content,
 			'creator_id' => $creator_id,
 			'attachment' => $file_name,
-			'create_time' => date('Y-m-d H:i:s'),
+			'create_time' => date('Y-m-d'),
 			'ddl' => $ddl
 		);
 
@@ -194,7 +194,7 @@ class Homework_model extends CI_Model {
 			}
 			$work->submissions = $submissions;
 			$hid_list = explode(',', $work->hid);
-			$this->db->select('id, sid, name');
+			$this->db->select('id, sid, hid, name');
 			$this->db->from('stu_list');
 			$this->db->where_in('hid', $hid_list);
 
@@ -276,7 +276,7 @@ class Homework_model extends CI_Model {
 				'homework_id' => $homework_id,
 				'user_id' => $user_id,
 				'file_name' => $file_name,
-				'submit_time' => date('Y-m-d H:i:s')
+				'submit_time' => date('Y-m-d')
 			     );
 		$this->db->from('homework_submission');
 		$this->db->where('homework_id', $homework_id);
