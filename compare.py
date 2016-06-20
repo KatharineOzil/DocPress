@@ -29,7 +29,13 @@ def transformation_format(path):
             os.system('/usr/local/bin/docx2txt.pl \'%s\' \'task_temp/%s.txt\'' % (path, name))
         elif (ext == '.pdf'):
             os.system('pdftotext \'%s\' \'task_temp/%s.txt\'' % (path, name))
-    return 'task_temp/%s.%s' % (name, 'txt')
+   file_name = 'task_temp/%s.%s' % (name, 'txt')
+    with open(file_name, 'r') as f:
+        content = f.read()
+    data = content.replace(' ', '').replace('\n', '').replace('\t', '')
+    with open(file_name, 'wb') as f:
+        f.write(data)
+    return file_name
 
 def diff_page(base_content, diff_content, range_=10):
     # return SequenceMatcher(None, base_content, diff_content).ratio()

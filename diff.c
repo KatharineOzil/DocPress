@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX 300
+#define MAX 500
 
 #define HASH_TABLE_MAX_SIZE 20000
 
@@ -89,8 +89,8 @@ void sliding_window(FILE *fp, int len, int *file_len, hash **hashNode, int *hash
     char str[MAX];
 
     while (fgets(str, MAX, fp)) {
-        int i, j, line_len = strlen(str);
-        for (i=0; i<(line_len - len + 1); i++) {
+        int i, j;
+        for (i=0; i<(MAX - len + 1); i++) {
             // $sub_string = substr($line,$i,$string_len);
             char temp[MAX];
             char *str_offset = str;
