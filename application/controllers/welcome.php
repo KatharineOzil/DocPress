@@ -303,41 +303,25 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->dbutil();
 		$this->load->helper('file');
-		$this->load->helper('download');
-		
+        $this->load->helper('download');
+
 		if (!isset($this->session->userdata['level']) || $this->session->userdata['level'] != 'teacher') {
 			redirect();
 		}
-/*		$this->db->from('homework_submission');
-		$this->db->where('homework_id', $id);		
-		$query = $this->db->get()->result();
-*/		$query = $this->db->query("SELECT * FROM homework_submission WHERE homework_id=$id");		
+		$work = $this->homework->get_homework_detail($id);
+        if ($work->creator_id != $this->session->userdata['id']) {
+			redirect('login');
+        }
 
+		$query = $this->db->query("SELECT user_id as student_id, SUBSTRING_INDEX(`file_name`, '_', 1) as hid, SUBSTRING_INDEX(SUBSTRING_INDEX(`file_name`, '.', '1'), '_', -1) as name, submit_time, score FROM homework_submission WHERE homework_id=$work->id");
 		$delimiter = ",";
 		$newline = "\r\n";
 		$enclosure = '"';
-		echo $this->dbutil->csv_from_result($query, $delimiter, $newline, $enclosure);
-
-		foreach ($query->result() as $k){
-			$info = explode("_",$k->file_name);
-			$hid = $info[0];
-			$a = $info[2];
-			$name = explode(".",$a);
-			$name = $name[0];
-			$data = array('hid'=>$hid, 'sid'=>$k->user_id, 'name'=>$name, 'score'=>$k->score);	
-			print_r($data);
-		$Filename = $id ."_score.csv";
-		force_download($Filename, $data);
-		}
-		
-		//$fp = fopen('score/$id.csv','w');
-		//fputcsv($fp, $data);
-		//fclose($fp);
+		$csv_data = $this->dbutil->csv_from_result($query, $delimiter, $newline, $enclosure);
+        force_download($work->title . "_score.csv", $csv_data);
 	}
 
 }
-
-	
 
 /* End of file welcome.php */
 /* Location: ./application/controllers/welcome.php */
