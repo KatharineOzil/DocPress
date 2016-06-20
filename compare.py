@@ -29,7 +29,7 @@ def transformation_format(path):
             os.system('/usr/local/bin/docx2txt.pl \'%s\' \'task_temp/%s.txt\'' % (path, name))
         elif (ext == '.pdf'):
             os.system('pdftotext \'%s\' \'task_temp/%s.txt\'' % (path, name))
-   file_name = 'task_temp/%s.%s' % (name, 'txt')
+    file_name = 'task_temp/%s.%s' % (name, 'txt')
     with open(file_name, 'r') as f:
         content = f.read()
     data = content.replace(' ', '').replace('\n', '').replace('\t', '')
@@ -48,6 +48,7 @@ if __name__ == '__main__':
     import itertools
     import shutil
     import glob
+    import csv
 
     if len(sys.argv) < 2:
         print 'Missing arguments, Usage: compare.py <dir> <range>'
@@ -81,16 +82,26 @@ if __name__ == '__main__':
         f.write('%d\n' % len(file_list))
 
     print 'Comparing ...'
-
+    
+    csv_row = []
     with open('%s.txt' % sys.argv[1], 'a') as f:
         for i in itertools.combinations(file_list, 2):
             a, b = i
             origin_path = transformation_format(a)
             compare_path = transformation_format(b)
             result = diff_page(origin_path, compare_path, range_) * 100
-            print a,' ', b, ' ',
+	    #csv_row.append((a, b, '%.2f%%' % result))
+	    csv_row.append((a.decode('utf-8').encode('gbk'), b.decode('utf-8').encode('gbk'), '%.2f' % result))
+	    print a,' ', b, ' ',
             print '%.2f%%' % result
             f.write('%s\t%s\t%.4f\n' % (a.split('_')[1], b.split('_')[1], 1-result/100.0))
+
+    csv_row.sort(key=lambda tup: float(tup[2]))
+    csvfile = file('%s.csv' % sys.argv[1], 'wb')
+    writer = csv.writer(csvfile)
+    writer.writerow([u'作业1'.encode('gbk'), u'作业2'.encode('gbk'), u'相似度'.encode('gbk')])
+    writer.writerows(csv_row)
+    csvfile.close()
 
     print 'Delete Temp Dir ...'
     shutil.rmtree('task_temp')

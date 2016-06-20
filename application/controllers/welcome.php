@@ -210,8 +210,12 @@ class Welcome extends CI_Controller {
 		if (!is_dir('upload/' . $homework->id)){
 			mkdir('upload/' . $homework->id);
 		}
-        $this->homework->submit($id, $this->session->userdata['id'], $file_name);
-        die('<meta charset="utf-8"><script>alert("上交成功");location.href = "' . site_url('/') . '";</script>');
+		$this->homework->submit($id, $this->session->userdata['id'], $file_name);
+		//if($_FILES["file"]["error"] == 0){
+			die('<meta charset="utf-8"><script>alert("上交成功");location.href = "' . site_url('/') . '";</script>');
+		//}else{
+		//	die('<meta charset="utf-8"><script>alert("上交失败，请重新上传");</script>')
+		//}
 	}
 
 	public function old_homework()
@@ -283,19 +287,57 @@ class Welcome extends CI_Controller {
 		move_uploaded_file($_FILES["the_file"]["tmp_name"], "reply/" . $work->homework_id . '/' .$file_name);
 		$this->homework->reply($id, $file_name);
 		redirect('homework_detail/' . $homework->id);
-    }
+    	}
 
-    public function mark_as($method, $id) {
-        $this->homework->mark_as($method, $id);
-        echo '修改完成';
-    }
+	public function mark_as($method, $id) {
+		$this->homework->mark_as($method, $id);
+		echo '修改完成';
+	}
 
 	public function visitor()
 	{
 		$this->load->view('visitor');
 	}
 
+	public function down_score($id)
+	{
+		$this->load->dbutil();
+		$this->load->helper('file');
+		$this->load->helper('download');
+		
+		if (!isset($this->session->userdata['level']) || $this->session->userdata['level'] != 'teacher') {
+			redirect();
+		}
+/*		$this->db->from('homework_submission');
+		$this->db->where('homework_id', $id);		
+		$query = $this->db->get()->result();
+*/		$query = $this->db->query("SELECT * FROM homework_submission WHERE homework_id=$id");		
+
+		$delimiter = ",";
+		$newline = "\r\n";
+		$enclosure = '"';
+		echo $this->dbutil->csv_from_result($query, $delimiter, $newline, $enclosure);
+
+		foreach ($query->result() as $k){
+			$info = explode("_",$k->file_name);
+			$hid = $info[0];
+			$a = $info[2];
+			$name = explode(".",$a);
+			$name = $name[0];
+			$data = array('hid'=>$hid, 'sid'=>$k->user_id, 'name'=>$name, 'score'=>$k->score);	
+			print_r($data);
+		$Filename = $id ."_score.csv";
+		force_download($Filename, $data);
+		}
+		
+		//$fp = fopen('score/$id.csv','w');
+		//fputcsv($fp, $data);
+		//fclose($fp);
+	}
+
 }
+
+	
 
 /* End of file welcome.php */
 /* Location: ./application/controllers/welcome.php */

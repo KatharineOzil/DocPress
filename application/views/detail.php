@@ -6,6 +6,9 @@
     <a class="mdl-navigation__link" href="<?php echo site_url('/'); ?>" class="btn btn-default"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect homework-detail-button">返回</button></a>
     <a class="mdl-navigation__link" href="<?php echo site_url('check_homework/' . $work->id); ?>" class="btn btn-primary"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect homework-detail-button">作业查重</button></a>
     <a class="mdl-navigation__link" href="javascript:save_score()" class="btn btn-default"><button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored homework-detail-button">保存成绩</button></a>
+    <a class="mdl-navigation__link" href="<?php echo site_url('welcome/down_score/' . $work->id); ?>" class="btn btn-default"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect homework-detail-button">
+      成绩下载
+    </button></a>
 
   </div>
   <div class="mdl-card__supporting-text detail-table-container">

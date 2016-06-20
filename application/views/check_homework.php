@@ -7,22 +7,26 @@
 	<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="check_homework()">
 	  开始检查
     </button>&nbsp;&nbsp;
+
     <div class="mdl-spinner mdl-js-spinner is-active check-load image-load-none"></div>
   </div>
   <div class="mdl-card__supporting-text">
     至少 3 个作业以上才可以生成图片查重结果。<br><br>
     灵敏度设置：
    <div class="process-container">
-    准确
+   灵敏
     <div class="process-bar">
       <input class="mdl-slider mdl-js-slider" id="range" type="range" min="10" max="100" value="10" tabindex="0" name="range">
     </div>
-    灵敏
+    准确
    </div>
     <br>
     <br>
   </div>
   <div class="mdl-card__actions mdl-card--border">
+    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="<?php echo base_url('upload/' . $work->id . '/' . $work->id . '.csv');?>">
+      下载查重结果
+    </a>
     <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect image-link" onclick="homework_tree()">
       生成图片查重结果
     </button>

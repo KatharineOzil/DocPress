@@ -228,15 +228,27 @@ class Ajax extends CI_Controller {
 
     public function save_score($id)
     {
-		if ($this->session->userdata['level'] != 'teacher') {
-			redirect();
+	if ($this->session->userdata['level'] != 'teacher') {
+		redirect();
         }
-
-		$work = $this->homework->get_homework_detail($id);
+	$work = $this->homework->get_homework_detail($id);
         if ($work->creator_id != $this->session->userdata['id']) {
 			redirect();
         }
-        print_r($this->input->post('score'));
+    	$score = $this->input->post('score');
+	foreach ($score as $k => $v){
+		$data = array(
+			'score' => $v
+		);
+		$limit = array(
+			'homework_id' => $id,
+			'user_id' => $k
+		);
+		$this->db->from('homework_submission');
+		$this->db->where($limit);
+		$this->db->update('homework_submission', $data);
+	}
+	echo '成绩评定成功';
     }
 
 }

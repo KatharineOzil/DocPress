@@ -272,25 +272,33 @@ class Homework_model extends CI_Model {
 		if (!count($homework)) {
 		    die('作业不存在');
 		}
-		$data = array(
-				'homework_id' => $homework_id,
-				'user_id' => $user_id,
-				'file_name' => $file_name,
-				'submit_time' => date('Y-m-d')
-			     );
-		$this->db->from('homework_submission');
-		$this->db->where('homework_id', $homework_id);
-		$this->db->where('user_id', $user_id);
-		$query = $this->db->get()->result();
-		if (count($query)) {
-			$query = $query[0];
-			@unlink('upload/' . $homework[0]->id . '/' . $query->file_name);
-			$this->db->where('id', $query->id);
-			$this->db->update('homework_submission', $data);
-		} else {
-			$this->db->insert('homework_submission', $data);
-		}
-		move_uploaded_file($_FILES["the_file"]["tmp_name"], "upload/" . $homework[0]->id .  '/' . $file_name);
+		if($_FILES["file"]["error"] != 0){
+                	die('<meta charset="utf-8"><script>alert("上交失败，请重新上传");history.go(-1);</script>');
+                }else{
+			if (!move_uploaded_file($_FILES["the_file"]["tmp_name"], "upload/" . $homework[0]->id .  '/' . $file_name)){
+                		die('<meta charset="utf-8"><script>alert("上交失败，请重新上传");history.go(-1);</script>');
+			}else{
+				$data = array(
+						'homework_id' => $homework_id,
+						'user_id' => $user_id,
+						'file_name' => $file_name,
+						'submit_time' => date('Y-m-d')
+					     );
+				$this->db->from('homework_submission');
+				$this->db->where('homework_id', $homework_id);
+				$this->db->where('user_id', $user_id);
+				$query = $this->db->get()->result();
+				if (count($query)) {
+					$query = $query[0];
+					@unlink('upload/' . $homework[0]->id . '/' . $query->file_name);
+					$this->db->where('id', $query->id);
+					$this->db->update('homework_submission', $data);
+				} else {
+					$this->db->insert('homework_submission', $data);
+				}
+                		die('<meta charset="utf-8"><script>alert("上交成功");location.href = "' . site_url('/') . '";</script>');
+			}
+		}                 
 	}
 
 	function reply($id, $file_name)
@@ -333,15 +341,15 @@ class Homework_model extends CI_Model {
 	    $this->db->select("hid, title");
 	    $this->db->where('tid', $id);
 	    return $this->db->get()->result();
-    }
+	}
 
-    function mark_as($method, $id) {
-        if ($method == "new") {
-            $this->db->where('id', $id);
-            $this->db->update('homework', array('ddl' => 0));
-        } else if ($method == "old") {
-            $this->db->where('id', $id);
-            $this->db->update('homework', array('ddl' => time()));
-        }
-    }
+	function mark_as($method, $id) {
+	    if ($method == "new") {
+	        $this->db->where('id', $id);
+	        $this->db->update('homework', array('ddl' => 0));
+    	    } else if ($method == "old") {
+	        $this->db->where('id', $id);
+	        $this->db->update('homework', array('ddl' => time()));
+	    }
+	}
 }

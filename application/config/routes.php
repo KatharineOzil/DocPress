@@ -53,6 +53,7 @@ $route['visitor'] = "welcome/visitor";
 $route['new'] = "welcome/new_homework"; 
 $route['change_password'] = "welcome/change_password";
 $route['old_homework'] = "welcome/old_homework";
+$route['down_score/(:any)'] = "welcome/down_score/$1"; 
 $route['404_override'] = '';
 
 
