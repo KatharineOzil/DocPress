@@ -317,8 +317,10 @@ class Welcome extends CI_Controller {
 		$delimiter = ",";
 		$newline = "\r\n";
 		$enclosure = '"';
-		$csv_data = $this->dbutil->csv_from_result($query, $delimiter, $newline, $enclosure);
-        force_download($work->title . "_score.csv", $csv_data);
+        $csv_data = $this->dbutil->csv_from_result($query, $delimiter, $newline, $enclosure);
+        $UTF_8_BOM = "\xEF\xBB\xBF";
+        $download_data = $UTF_8_BOM . $csv_data;
+        force_download("$work->title" . "_score.csv", $download_data);
 	}
 
 }
