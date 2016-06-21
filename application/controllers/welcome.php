@@ -315,11 +315,9 @@ class Welcome extends CI_Controller {
 
 		$query = $this->db->query("SELECT user_id as student_id, SUBSTRING_INDEX(`file_name`, '_', 1) as hid, SUBSTRING_INDEX(SUBSTRING_INDEX(`file_name`, '.', '1'), '_', -1) as name, submit_time, score FROM homework_submission WHERE homework_id=$work->id");
 		$delimiter = ",";
-		$newline = "\r\n";
+		$newline = "\n";
 		$enclosure = '"';
         $csv_data = $this->dbutil->csv_from_result($query, $delimiter, $newline, $enclosure);
-        // $UTF_8_BOM = "\xEF\xBB\xBF";
-        // $download_data = $UTF_8_BOM . $csv_data;
         $download_data = iconv("UTF-8", "GBK", $csv_data);
         force_download("$work->title" . "_score.csv", $download_data);
 	}
