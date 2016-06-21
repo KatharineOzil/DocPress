@@ -67,7 +67,7 @@ if __name__ == '__main__':
     os.chdir('upload/' + sys.argv[1])
 
     if not os.path.exists('task_temp'):
-        print 'Create Temp Dir ...'
+        # print 'Create Temp Dir ...'
         os.mkdir('task_temp')
 
     file_list = []
@@ -75,14 +75,14 @@ if __name__ == '__main__':
         file_list.extend(glob.glob('*%s' % ext))
 
     for i in file_list:
-        print 'Transform: %s' % i
+        # print 'Transform: %s' % i
         transformation_format(i)
 
     with open('%s.txt' % sys.argv[1], 'w') as f:
         f.write('%d\n' % len(file_list))
 
-    print 'Comparing ...'
-    
+    # print 'Comparing ...'
+
     csv_row = []
     with open('%s.txt' % sys.argv[1], 'a') as f:
         for i in itertools.combinations(file_list, 2):
