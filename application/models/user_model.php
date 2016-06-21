@@ -76,7 +76,7 @@ class User_model extends CI_Model {
         $this->db->from('teacher_user');
         $this->db->where('prefix', $name);
         $user = $this->db->get()->result();
-        if (count($user) == 0)
+        if (count($user) > 0)
             return false;
         return true;
     }

@@ -7,6 +7,7 @@ class Welcome extends CI_Controller {
 
 		$this->load->model('Homework_model', 'homework', TRUE);
 		$this->load->model('User_model', 'user', TRUE);
+		$this->load->model('Setting_model', 'setting', TRUE);
 	}
 
 	public function index()
@@ -14,13 +15,14 @@ class Welcome extends CI_Controller {
 		if (!isset($this->session->userdata['id'])) {
 			redirect('login');
 		}
-		$data['works'] = $this->homework->getHomeworks($this->session->userdata['id'], $this->session->userdata['level']);
+        $data['works'] = $this->homework->getHomeworks($this->session->userdata['id'], $this->session->userdata['level']);
+        $data['email'] = $this->setting->get_mail();
 		if ($this->session->userdata['level'] == 'student') {
 			$this->load->view('student', $data);
 		} else if ($this->session->userdata['level'] == 'teacher') {
 			$this->load->view('teacher', $data);
-		} else if ($this->session->userdata['level'] == 'admin'){
-			$this->load->view('add_list');
+        } else if ($this->session->userdata['level'] == 'admin'){
+			$this->load->view('add_list', $data);
 		} else {
 			$this->load->view('index');
 		}
@@ -44,11 +46,12 @@ class Welcome extends CI_Controller {
 
 	public function add_list()
 	{
+        $data['email'] = $this->setting->get_mail();
 		if ($this->session->userdata['level'] != 'admin') {
 			redirect('admin');
 		}
 
-		$this->load->view('add_list');
+		$this->load->view('add_list', $data);
 	}
 
 	public function edit_list()
@@ -58,6 +61,7 @@ class Welcome extends CI_Controller {
 		}
 
 		$data['list'] = $this->user->edit_list();
+        $data['email'] = $this->setting->get_mail();
 		$this->load->view('edit_list', $data);
 	}
 

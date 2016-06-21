@@ -63,9 +63,12 @@
       <?php if (isset($this->session->userdata['level']) && $this->session->userdata['level'] == 'admin') { ?>
         <a class="mdl-navigation__link" href="<?php echo site_url('add_list'); ?>"><i class="material-icons">turned_in_not</i>添加教师名单</a>
         <a class="mdl-navigation__link" href="<?php echo site_url('edit_list'); ?>"><i class="material-icons">mode_edit</i>修改教师名单</a>
+        <a class="mdl-navigation__link email-button" href="##"><i class="material-icons">settings</i>邮箱设置</a>
       <?php }?>
       <?php if (isset($this->session->userdata['id'])) { ?>
-      <a class="mdl-navigation__link" href="<?php echo site_url('old_homework'); ?>"><i class="material-icons">check_circle</i>到期作业</a>
+        <?php if (isset($this->session->userdata['level']) && $this->session->userdata['level'] == 'teacher') { ?>
+          <a class="mdl-navigation__link" href="<?php echo site_url('old_homework'); ?>"><i class="material-icons">check_circle</i>到期作业</a>
+        <?php }?>
         <?php if (isset($this->session->userdata['level']) && $this->session->userdata['level'] == 'teacher') { ?>
           <a class="mdl-navigation__link" href="<?php echo site_url('new'); ?>"><i class="material-icons">turned_in_not</i>发布作业</a>
         <?php }?>
@@ -86,4 +89,3 @@
   </div>
   <main class="mdl-layout__content">
     <div class="pagea-content">
-        

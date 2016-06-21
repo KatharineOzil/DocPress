@@ -283,7 +283,7 @@ class Homework_model extends CI_Model {
 						'user_id' => $user_id,
 						'file_name' => $file_name,
 						'submit_time' => date('Y-m-d')
-					     );
+				);
 				$this->db->from('homework_submission');
 				$this->db->where('homework_id', $homework_id);
 				$this->db->where('user_id', $user_id);
@@ -298,7 +298,7 @@ class Homework_model extends CI_Model {
 				}
                 		die('<meta charset="utf-8"><script>alert("上交成功");location.href = "' . site_url('/') . '";</script>');
 			}
-		}                 
+		}
 	}
 
 	function reply($id, $file_name)

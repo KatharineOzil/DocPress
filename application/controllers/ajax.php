@@ -7,6 +7,7 @@ class Ajax extends CI_Controller {
 
 		$this->load->model('User_model', 'user', TRUE);
 		$this->load->model('Homework_model', 'homework', TRUE);
+		$this->load->model('Setting_model', 'setting', TRUE);
 
 	}
 
@@ -16,7 +17,7 @@ class Ajax extends CI_Controller {
 	}
 
 	public function change_password()
-	{	
+	{
 		$old_password = $this->input->post('old_password');
 		$password = $this->input->post('new_password');
 		$con_password = $this->input->post('confirm');
@@ -27,7 +28,7 @@ class Ajax extends CI_Controller {
 				echo "密码修改成功，请重新登录";
 			} else {
 				echo "旧密码输入错误，请检查后重新输入";
-			}	
+			}
 		}
 	}
 
@@ -53,8 +54,7 @@ class Ajax extends CI_Controller {
 	{
 		$sid = $this->input->post('sid');
 		if (!$sid) {
-			echo('请输入信息');
-			die();
+			die('请输入信息');
 		}
 		if (preg_match('/^\d{10}$/', $sid)){
 			$ret = $this->user->check_student($sid);
@@ -62,15 +62,20 @@ class Ajax extends CI_Controller {
 			$ret = $this->user->check_teacher_id($sid);
 		}
 		if ($ret) {
-			echo('用户不存在！');
-			die();
+			die('用户不存在！');
 		}
 		$token = md5(md5(rand()) . rand());
 		$this->session->set_userdata('token', $token);
 		$this->session->set_userdata('sid', $sid);
 		$mail_body = "点击如下 URL 重置密码：" . site_url("welcome/reset_password?token=" . $token);
         	$this->load->library('mailer');
-	
+
+        $email = $this->setting->get_mail();
+        $this->mailer->mail->Host = $email['smtp'];
+        $this->mailer->mail->Username = $email['email'];
+        $this->mailer->mail->Password = $email['password'];
+        $this->mailer->mail->SetFrom($email['email'], 'DocPress 找回密码');
+
 		if (preg_match('/^\d{10}$/', $sid)){
 			$this->mailer->sendmail(
 				"$sid@stu.cqupt.edu.cn",
@@ -80,7 +85,7 @@ class Ajax extends CI_Controller {
 		);
 			echo('找回密码相关邮件发送成功，请登录 stu.cqupt.edu.cn 查看');
 		}
-		else{
+        else{
 			$this->mailer->sendmail(
 				"$sid@cqupt.edu.cn",
 				"$sid",
@@ -228,27 +233,36 @@ class Ajax extends CI_Controller {
 
     public function save_score($id)
     {
-	if ($this->session->userdata['level'] != 'teacher') {
-		redirect();
+        if ($this->session->userdata['level'] != 'teacher') {
+            redirect();
         }
-	$work = $this->homework->get_homework_detail($id);
+        $work = $this->homework->get_homework_detail($id);
         if ($work->creator_id != $this->session->userdata['id']) {
-			redirect();
+            redirect();
         }
-    	$score = $this->input->post('score');
-	foreach ($score as $k => $v){
-		$data = array(
-			'score' => $v
-		);
-		$limit = array(
-			'homework_id' => $id,
-			'user_id' => $k
-		);
-		$this->db->from('homework_submission');
-		$this->db->where($limit);
-		$this->db->update('homework_submission', $data);
-	}
-	echo '成绩评定成功';
+        $score = $this->input->post('score');
+        foreach ($score as $k => $v){
+            $data = array(
+                'score' => $v
+            );
+            $limit = array(
+                'homework_id' => $id,
+                'user_id' => $k
+            );
+            $this->db->from('homework_submission');
+            $this->db->where($limit);
+            $this->db->update('homework_submission', $data);
+        }
+        echo '成绩评定成功';
+    }
+
+    public function set_email()
+    {
+        $smtp = $this->input->post('smtp');
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+        $this->setting->set_mail($smtp, $email, $password);
+        echo '修改成功';
     }
 
 }
