@@ -72,9 +72,7 @@ foreach ($works as $key => $work) {
     ?>
     <?php
     ?>
-    <li class="mdl-menu__item student-login"><a class="mdl-navigation__link" href="<?php echo site_url('welcome/download/' . $work->id); ?>">
-      打包下载
-    </a></li>
+    <li class="mdl-menu__item student-login" onclick="location.href = '<?php echo site_url('welcome/download/' . $work->id); ?>'">打包下载</li>
   </ul>
   </div>
 </div>

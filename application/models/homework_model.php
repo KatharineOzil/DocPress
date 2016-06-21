@@ -271,8 +271,8 @@ class Homework_model extends CI_Model {
 		$homework = $this->db->get()->result();
 		if (!count($homework)) {
 		    die('作业不存在');
-		}
-		if($_FILES["file"]["error"] != 0){
+        }
+		if($_FILES["the_file"]["error"] != 0){
                 	die('<meta charset="utf-8"><script>alert("上交失败，请重新上传");history.go(-1);</script>');
                 }else{
 			if (!move_uploaded_file($_FILES["the_file"]["tmp_name"], "upload/" . $homework[0]->id .  '/' . $file_name)){

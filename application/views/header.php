@@ -66,7 +66,7 @@
         <a class="mdl-navigation__link email-button" href="##"><i class="material-icons">settings</i>邮箱设置</a>
       <?php }?>
       <?php if (isset($this->session->userdata['id'])) { ?>
-        <?php if (isset($this->session->userdata['level']) && $this->session->userdata['level'] == 'teacher') { ?>
+        <?php if (isset($this->session->userdata['level']) && $this->session->userdata['level'] != 'admin') { ?>
           <a class="mdl-navigation__link" href="<?php echo site_url('old_homework'); ?>"><i class="material-icons">check_circle</i>到期作业</a>
         <?php }?>
         <?php if (isset($this->session->userdata['level']) && $this->session->userdata['level'] == 'teacher') { ?>
@@ -81,11 +81,7 @@
        <a class="mdl-navigation__link" href="<?php echo site_url('register');?>"><i class="material-icons">perm_identity</i>注册</a>
        <a class="mdl-navigation__link" href="<?php echo site_url('reset');?>"><i class="material-icons">reply</i>找回密码</a> 
       <?php }?>
-<!--	<div class="mdl-layout-spacer"></div>
-	<p class="mdl-nav"><br>All content copyright 
-	<br/>Katharine && Ricter 
-	<br/>© 2016 • All rights reserved.</p>
--->    </nav>
+    </nav>
   </div>
   <main class="mdl-layout__content">
     <div class="pagea-content">
