@@ -23,7 +23,7 @@ then
 fi
 
 /usr/local/bin/drawgram <<eof
-/Library/WebServer/Documents/stu_task/fontfile
+$(pwd)/../../fontfile
 y
 eof
 

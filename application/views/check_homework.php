@@ -24,14 +24,14 @@
     <br>
   </div>
   <div class="mdl-card__actions mdl-card--border">
-    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="<?php echo base_url('upload/' . $work->id . '/' . $work->id . '.csv');?>">
-      下载查重结果
-    </a>
     <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect image-link" onclick="homework_tree()">
       生成图片查重结果
     </button>
     <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="<?php echo site_url('welcome/homework_tree/' . $work->id);?>">
       查看图片查重结果
+    </a>
+    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="<?php echo base_url('upload/' . $work->id . '/' . $work->id . '.csv');?>">
+      下载查重结果(csv)
     </a>
     <div class="mdl-spinner mdl-js-spinner is-active image-load-none image-load-display"></div>
   </div>
@@ -43,7 +43,8 @@
 
 <script>
 function check_homework() {
-    $('.check-load').removeClass('image-load-none');
+    $('.check-load').show();
+    //$('.check-load').removeClass('image-load-none');
     var url = "<?php echo site_url('welcome/ajax_check_homework/' . $work->id);?>";
     url += "?range=" + $("#range").val();
     $('#result').text('请等待...');
@@ -57,7 +58,8 @@ function check_homework() {
 }
 
 function homework_tree() {
-    $('.image-load-display').removeClass('image-load-none');
+    $('.check-load').show();
+    //$('.image-load-display').removeClass('image-load-none');
 	$.get("<?php echo site_url('welcome/ajax_homework_tree/' . $work->id);?>",
 	function (data, status) {
 		alert(data);

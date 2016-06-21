@@ -21,7 +21,7 @@ def transformation_format(path):
     name, ext = file_extension(path)
     if not ext in EXTS:
         return None
-
+    os.putenv('PATH', '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin')
     if not os.path.exists('task_temp/%s.txt' % ( name)):
         if (ext == '.doc'):
             os.system('/usr/bin/wvText \'%s\' \'task_temp/%s.txt\'' % (path, name))
@@ -41,8 +41,6 @@ def diff_page(base_content, diff_content, range_=10):
     # return SequenceMatcher(None, base_content, diff_content).ratio()
     return float(os.popen('/usr/local/bin/diffh \'%s\' \'%s\' %d' % (base_content, diff_content, range_)).read())
 
-#def get_files(ext):
-#    return [i for i in os.listdir('./') if i.endswith(ext)]
 
 if __name__ == '__main__':
     import itertools
@@ -90,10 +88,8 @@ if __name__ == '__main__':
             origin_path = transformation_format(a)
             compare_path = transformation_format(b)
             result = diff_page(origin_path, compare_path, range_) * 100
-	    #csv_row.append((a, b, '%.2f%%' % result))
-	    csv_row.append((a.decode('utf-8').encode('gbk'), b.decode('utf-8').encode('gbk'), '%.2f' % result))
-	    print a,' ', b, ' ',
-            print '%.2f%%' % result
+            csv_row.append((a.decode('utf-8').encode('gbk'), b.decode('utf-8').encode('gbk'), '%.2f' % result))
+            print a,' ', b, ' ', '%.2f%%' % result
             f.write('%s\t%s\t%.4f\n' % (a.split('_')[1], b.split('_')[1], 1-result/100.0))
 
     csv_row.sort(key=lambda tup: float(tup[2]))
@@ -103,5 +99,5 @@ if __name__ == '__main__':
     writer.writerows(csv_row)
     csvfile.close()
 
-    print 'Delete Temp Dir ...'
+    # print 'Delete Temp Dir ...'
     shutil.rmtree('task_temp')
