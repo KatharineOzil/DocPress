@@ -42,7 +42,7 @@
   </form>
 </div>
 <div class="mdl-dialog__actions">
-  <button type="button" class="mdl-button">保存</button>
+  <button type="button" class="mdl-button save">保存</button>
   <button type="button" class="mdl-button close">关闭</button>
 </div>
 </dialog>
