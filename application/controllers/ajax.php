@@ -130,7 +130,7 @@ class Ajax extends CI_Controller {
 				echo '学号已被注册';
 			}
         } else if ($level == 'teacher') {
-            if ($this->user->check_teacher_nid($sid)) {
+            if ($this->user->check_teacher_nid($name)) {
 				$user_id = $this->user->create_teacher($sid, $class, $name, $password);
 				if ($user_id) {
 					$this->session->set_userdata('id', $sid);
@@ -139,10 +139,10 @@ class Ajax extends CI_Controller {
 					$this->session->set_userdata('prefix', $class);
 					echo 'success';
 				} else {
-					echo '注册失败，请联系管理员';
+					echo '该用户已被注册';
 				}
 			} else {
-				echo '该用户已被注册';
+				echo '该用户未被授权，请联系管理员';
 			}
 		}
 	}

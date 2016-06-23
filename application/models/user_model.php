@@ -74,9 +74,9 @@ class User_model extends CI_Model {
         if (empty($name))
             return false;
         $this->db->from('teacher_user');
-        $this->db->where('id', $name);
+        $this->db->where('name', $name);
         $user = $this->db->get()->result();
-        if (count($user) > 0)
+        if (count($user) == 0)
             return false;
         return true;
     }
